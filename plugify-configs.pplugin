@@ -1,0 +1,19 @@
+{
+  "fileVersion": 1,
+  "version": 1,
+  "versionName": "1.0",
+  "friendlyName": "Configs Plugin",
+  "description": "Tests calls to and from another language plugin",
+  "createdBy": "untrustedmodders",
+  "createdByURL": "https://github.com/untrustedmodders/",
+  "docsURL": "",
+  "downloadURL": "",
+  "updateURL": "",
+  "entryPoint": "bin/plugify-configs",
+  "supportedPlatforms": [],
+  "languageModule": {
+    "name": "cpp"
+  },
+  "dependencies": [],
+  "exportedMethods": []
+}
