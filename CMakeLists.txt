@@ -45,8 +45,8 @@ if(LINUX)
 endif()
 
 include(GenerateExportHeader)
-generate_export_header(${PROJECT_NAME} EXPORT_MACRO_NAME PLUGIN_API EXPORT_FILE_NAME "${CMAKE_BINARY_DIR}/exports/plugin_export.h")
-target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_BINARY_DIR}/exports")
+generate_export_header(${PROJECT_NAME} EXPORT_MACRO_NAME PLUGIFY_CONFIGS_API EXPORT_FILE_NAME "${CMAKE_BINARY_DIR}/exports/plugify_configs_export.h")
+target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_BINARY_DIR}/exports")
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE 
         PLUGIFY_FORMAT_SUPPORT=$<BOOL:${COMPILER_SUPPORTS_FORMAT}>
