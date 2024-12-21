@@ -1,9 +1,17 @@
 #include "plugin.hpp"
 #include <plugify_configs_export.h>
 
-void ConfgisPlugin::OnPluginStart()
+namespace pcf
 {
+	void ConfigsPlugin::OnPluginStart()
+	{
+	}
+
+	void ConfigsPlugin::OnPluginEnd()
+	{
+	}
+
+	ConfigsPlugin plugin;
 }
 
-ConfgisPlugin g_configsPlugin;
-EXPOSE_PLUGIN(PLUGIFY_CONFIGS_API, &g_configsPlugin)
+EXPOSE_PLUGIN(PLUGIFY_CONFIGS_API, &pcf::plugin)
