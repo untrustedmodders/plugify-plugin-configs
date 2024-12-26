@@ -1,3 +1,4 @@
+#include "readers/json_glaze.hpp"
 #include "plugin.hpp"
 #include "readerfactory.hpp"
 #include <plugify-configs/plugify-configs.hpp>
@@ -8,6 +9,7 @@ namespace pcf
 	void ConfigsPlugin::OnPluginStart()
 	{
 		_factory = std::make_unique<ReaderFactory>();
+		_factory->RegisterReader("json", &ReadJsonConfig);
 	}
 
 	void ConfigsPlugin::OnPluginEnd()
