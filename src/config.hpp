@@ -31,6 +31,10 @@ namespace pcf
 		public:
 			Node();
 
+		public:
+			template<class T>
+			void Set(T value);
+
 		private:
 			StorageType _storage = ObjectType{};
 		};
@@ -38,10 +42,26 @@ namespace pcf
 	public:
 		static std::unique_ptr<Config> MakeConfig();
 
+		template<typename T> requires Config::Detail::Node::is_storable_v<T>
+		void Set(T value);
+
 	private:
 		Detail();
 
 	private:
 		Node::Ptr _root = std::make_unique<Config::Detail::Node>();
 	};
+
+	template<class T>
+	void Config::Detail::Node::Set(T value)
+	{
+		static_assert(std::is_scalar_v<T>);
+		_storage = value;
+	}
+
+	template <typename T> requires Config::Detail::Node::is_storable_v<T>
+	void Config::Detail::Set(T value)
+	{
+		_root->Set(value);
+	}
 }

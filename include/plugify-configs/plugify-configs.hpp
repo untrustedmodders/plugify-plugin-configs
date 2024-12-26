@@ -22,6 +22,8 @@ namespace pcf
 	public:
 		PLUGIFY_CONFIGS_API virtual ~Config();
 
+		PLUGIFY_CONFIGS_API void Set(int64_t value);
+
 	public:
 		class Detail;
 

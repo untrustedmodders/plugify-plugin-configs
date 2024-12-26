@@ -8,6 +8,7 @@ namespace pcf
 	std::unique_ptr<Config> ReadJsonConfig([[maybe_unused]] std::string_view path)
 	{
 		auto config = MakeConfig();
+		config->Set(444);
 		return config;
 	}
 }

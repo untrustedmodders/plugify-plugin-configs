@@ -11,6 +11,11 @@ namespace pcf
 
 	Config::Detail::Detail() = default;
 
+	void Config::Set(int64_t value)
+	{
+		_detail->Set(value);
+	}
+
 	Config::Config(std::unique_ptr<Config::Detail> detail)
 		: _detail(std::move(detail))
 	{
