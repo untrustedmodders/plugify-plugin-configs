@@ -15,6 +15,15 @@ namespace pcf
 		_factory.reset();
 	}
 
+	std::unique_ptr<Config> ConfigsPlugin::ReadConfig(std::string_view path)
+	{
+		if (!_factory) {
+			return nullptr;
+		}
+
+		return _factory->ReadConfig(path);
+	}
+
 	ConfigsPlugin plugin;
 }
 

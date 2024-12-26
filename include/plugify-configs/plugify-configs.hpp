@@ -1,4 +1,5 @@
 #pragma once
+#include "methods.hpp"
 #include <plugify_configs_export.h>
 #include <memory>
 
