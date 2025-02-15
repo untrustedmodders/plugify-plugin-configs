@@ -22,6 +22,7 @@ namespace pcf
 		if (reader != _readers.end()) {
 			return (reader->second)(path);
 		}
+		SetError(std::format("No factory for {}", ext));
 		return nullptr;
 	}
 }

@@ -17,3 +17,13 @@ std::unique_ptr<pcf::Config> MakeConfig()
 {
 	return pcf::Config::Detail::MakeConfig();
 }
+
+void SetError(std::string_view error)
+{
+	pcf::plugin.SetError(error);
+}
+
+plg::string GetError()
+{
+	return pcf::plugin.GetError();
+}

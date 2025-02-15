@@ -16,8 +16,11 @@ namespace pcf
 
 	public:
 		std::unique_ptr<Config> ReadConfig(std::string_view path);
+		void SetError(std::string_view error);
+		plg::string GetError();
 
 	private:
 		std::unique_ptr<ReaderFactory> _factory;
+		plg::string _error;
 	};
 }
