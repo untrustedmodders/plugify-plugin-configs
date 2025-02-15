@@ -22,7 +22,7 @@ namespace pcf
 			using NumberType = int64_t;
 			using FloatType = double;
 			using StringType = plg::string;
-			using ObjectType = std::map<plg::string, Ptr>;
+			using ObjectType = std::multimap<plg::string, Ptr>;
 			using ArrayType = plg::vector<Ptr>;
 			using StorageType = std::variant<NullType, BoolType, NumberType, FloatType, StringType, ObjectType, ArrayType>;
 			template<class T>
