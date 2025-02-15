@@ -1,4 +1,5 @@
 #include "config.hpp"
+#include <string>
 
 namespace pcf
 {
@@ -32,6 +33,31 @@ namespace pcf
 			return NodeType::Null;
 		}
 		return static_cast<NodeType>(_storage.index());
+	}
+
+	plg::string Config::Detail::Node::ToJsonString() const
+	{
+		plg::string json;
+
+		if (std::get_if<NullType>(&_storage)) {
+			json = "null";
+		}
+		else if (const bool* const boolValue = std::get_if<BoolType>(&_storage)) {
+			json = *boolValue ? "true" : "false";
+		}
+		else if (const int64_t* const numberValue = std::get_if<NumberType>(&_storage)) {
+			json = std::to_string(*numberValue);
+		}
+		else if (const double* const floatValue = std::get_if<FloatType>(&_storage)) {
+			json = std::to_string(*floatValue);
+		}
+		else if (const plg::string* const stringValue = std::get_if<StringType>(&_storage)) {
+			json += '\"';
+			json += *stringValue;
+			json += '\"';
+		}
+
+		return json;
 	}
 
 	std::unique_ptr<Config> Config::Detail::MakeConfig()
@@ -79,6 +105,16 @@ namespace pcf
 	bool Config::Detail::IsArray() const
 	{
 		return GetType() == NodeType::Array;
+	}
+
+	plg::string Config::Detail::NodeToJsonString() const
+	{
+		return GetCurrent().ToJsonString();
+	}
+
+	plg::string Config::Detail::RootToJsonString() const
+	{
+		return _root->ToJsonString();
 	}
 
 	Config::Detail::Node& Config::Detail::GetCurrent() const
@@ -159,6 +195,16 @@ namespace pcf
 	void Config::Set(double value)
 	{
 		_detail->Set(value);
+	}
+
+	plg::string Config::NodeToJsonString() const
+	{
+		return _detail->NodeToJsonString();
+	}
+
+	plg::string Config::RootToJsonString() const
+	{
+		return _detail->RootToJsonString();
 	}
 
 	Config::Config(std::unique_ptr<Config::Detail> detail)

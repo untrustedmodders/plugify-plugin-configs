@@ -38,6 +38,9 @@ namespace pcf
 		PLUGIFY_CONFIGS_API void Set(float value);
 		PLUGIFY_CONFIGS_API void Set(double value);
 
+		PLUGIFY_CONFIGS_API plg::string NodeToJsonString() const;
+		PLUGIFY_CONFIGS_API plg::string RootToJsonString() const;
+
 	public:
 		class Detail;
 

@@ -38,6 +38,8 @@ namespace pcf
 			template<class T>
 			void Set(T value);
 
+			plg::string ToJsonString() const;
+
 		private:
 			StorageType _storage = ObjectType{};
 		};
@@ -56,6 +58,9 @@ namespace pcf
 
 		template<typename T> requires Config::Detail::Node::is_storable_v<T>
 		void Set(T value);
+
+		plg::string NodeToJsonString() const;
+		plg::string RootToJsonString() const;
 
 	private:
 		Detail();
