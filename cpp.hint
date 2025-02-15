@@ -1,0 +1,6 @@
+// Файлы указаний помогают среде IDE Visual Studio интерпретировать идентификаторы Visual C++
+// (например, имена функций и макросов).
+// Дополнительные сведения: https://go.microsoft.com/fwlink/?linkid=865984
+#define PLUGIFY_CONFIGS_API
+#define PLUGIFY_CONFIGS_API __declspec(dllexport)
+#define PLUGIFY_CONFIGS_API __declspec(dllimport)
