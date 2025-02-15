@@ -22,7 +22,21 @@ namespace pcf
 	public:
 		PLUGIFY_CONFIGS_API virtual ~Config();
 
+		PLUGIFY_CONFIGS_API NodeType GetType() const;
+		PLUGIFY_CONFIGS_API bool IsNull() const;
+		PLUGIFY_CONFIGS_API bool IsBool() const;
+		PLUGIFY_CONFIGS_API bool IsInt() const;
+		PLUGIFY_CONFIGS_API bool IsFloat() const;
+		PLUGIFY_CONFIGS_API bool IsString() const;
+		PLUGIFY_CONFIGS_API bool IsObject() const;
+		PLUGIFY_CONFIGS_API bool IsArray() const;
+
+		PLUGIFY_CONFIGS_API void Set(nullptr_t);
+		PLUGIFY_CONFIGS_API void Set(bool value);
+		PLUGIFY_CONFIGS_API void Set(int32_t value);
 		PLUGIFY_CONFIGS_API void Set(int64_t value);
+		PLUGIFY_CONFIGS_API void Set(float value);
+		PLUGIFY_CONFIGS_API void Set(double value);
 
 	public:
 		class Detail;

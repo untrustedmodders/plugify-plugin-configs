@@ -4,6 +4,7 @@
 #include <plugify/vector.hpp>
 #include <plugify/string.hpp>
 #include <map>
+#include <stack>
 #include <variant>
 #include <memory>
 
@@ -32,6 +33,8 @@ namespace pcf
 			Node();
 
 		public:
+			NodeType GetType() const;
+
 			template<class T>
 			void Set(T value);
 
@@ -42,14 +45,26 @@ namespace pcf
 	public:
 		static std::unique_ptr<Config> MakeConfig();
 
+		NodeType GetType() const;
+		bool IsNull() const;
+		bool IsBool() const;
+		bool IsInt() const;
+		bool IsFloat() const;
+		bool IsString() const;
+		bool IsObject() const;
+		bool IsArray() const;
+
 		template<typename T> requires Config::Detail::Node::is_storable_v<T>
 		void Set(T value);
 
 	private:
 		Detail();
 
+		Node& GetCurrent() const;
+
 	private:
 		Node::Ptr _root = std::make_unique<Config::Detail::Node>();
+		std::stack<Node*> _track;
 	};
 
 	template<class T>
