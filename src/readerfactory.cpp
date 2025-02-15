@@ -18,11 +18,15 @@ namespace pcf
 		namespace fs = std::filesystem;
 		const auto config_path = fs::path(path);
 		const auto ext = config_path.extension().string();
-		const auto reader = _readers.find(ext);
-		if (reader != _readers.end()) {
-			return (reader->second)(path);
+		if (ext.empty()) {
+			SetError("Path has no extension");
+			return nullptr;
 		}
-		SetError(std::format("No factory for {}", ext));
-		return nullptr;
+		const auto reader = _readers.find(std::string_view(ext).substr(1));
+		if (reader == _readers.end()) {
+			SetError(std::format("No factory for {}", ext));
+			return nullptr;
+		}
+		return (reader->second)(path);
 	}
 }
