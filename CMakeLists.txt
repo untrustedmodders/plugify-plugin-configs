@@ -25,6 +25,11 @@ endif()
 include(cmake/compat_format.cmake)
 
 #
+# Glaze
+#
+include(cmake/glaze.cmake)
+
+#
 # Plugin
 #
 file(GLOB_RECURSE PLUGIN_SOURCES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "src/*.cpp")
@@ -54,3 +59,5 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 if(NOT COMPILER_SUPPORTS_FORMAT)
     target_link_libraries(${PROJECT_NAME} PRIVATE fmt::fmt-header-only)
 endif()
+
+target_link_libraries(${PROJECT_NAME} PRIVATE glaze::glaze)
