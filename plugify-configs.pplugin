@@ -1,7 +1,6 @@
 {
   "fileVersion": 1,
-  "version": 1,
-  "versionName": "1.0",
+  "version": "0.1.0",
   "friendlyName": "Configs Plugin",
   "description": "Tests calls to and from another language plugin",
   "createdBy": "untrustedmodders",
