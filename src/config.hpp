@@ -37,6 +37,8 @@ namespace pcf
 
 			template<class T>
 			void Set(T value);
+			void SetObject();
+			void SetArray();
 
 			plg::string ToJsonString() const;
 
@@ -58,6 +60,8 @@ namespace pcf
 
 		template<typename T> requires Config::Detail::Node::is_storable_v<T>
 		void Set(T value);
+		void SetObject();
+		void SetArray();
 
 		plg::string NodeToJsonString() const;
 		plg::string RootToJsonString() const;
@@ -75,13 +79,13 @@ namespace pcf
 	template<class T>
 	void Config::Detail::Node::Set(T value)
 	{
-		static_assert(std::is_scalar_v<T>);
-		_storage = value;
+		static_assert(is_storable_v<T>);
+		_storage = std::move(value);
 	}
 
 	template <typename T> requires Config::Detail::Node::is_storable_v<T>
 	void Config::Detail::Set(T value)
 	{
-		_root->Set(value);
+		GetCurrent().Set(std::move(value));
 	}
 }

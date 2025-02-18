@@ -35,6 +35,18 @@ namespace pcf
 		return static_cast<NodeType>(_storage.index());
 	}
 
+	void Config::Detail::Node::SetObject()
+	{
+		_storage = ObjectType{};
+		_objCache = std::get<ObjectType>(_storage).end();
+	}
+
+	void Config::Detail::Node::SetArray()
+	{
+		_storage = ArrayType{};
+		_arrCache = std::get<ArrayType>(_storage).end();
+	}
+
 	plg::string Config::Detail::Node::ToJsonString() const
 	{
 		plg::string json;
@@ -107,6 +119,16 @@ namespace pcf
 		return GetType() == NodeType::Array;
 	}
 
+	void Config::Detail::SetObject()
+	{
+		GetCurrent().SetObject();
+	}
+
+	void Config::Detail::SetArray()
+	{
+		GetCurrent().SetArray();
+	}
+
 	plg::string Config::Detail::NodeToJsonString() const
 	{
 		return GetCurrent().ToJsonString();
@@ -167,7 +189,7 @@ namespace pcf
 		return _detail->IsArray();
 	}
 
-	void Config::Set(nullptr_t)
+	void Config::SetNull()
 	{
 		_detail->Set(nullptr);
 	}
@@ -195,6 +217,21 @@ namespace pcf
 	void Config::Set(double value)
 	{
 		_detail->Set(value);
+	}
+
+	void Config::Set(plg::string value)
+	{
+		_detail->Set(std::move(value));
+	}
+
+	void Config::SetObject()
+	{
+		_detail->SetObject();
+	}
+
+	void Config::SetArray()
+	{
+		_detail->SetArray();
 	}
 
 	plg::string Config::NodeToJsonString() const

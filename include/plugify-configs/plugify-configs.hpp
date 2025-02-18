@@ -5,6 +5,9 @@
 
 namespace pcf
 {
+	enum cfobject_t { cfobject };
+	enum cfarray_t { cfarray };
+
 	class Config
 	{
 	public:
@@ -31,12 +34,19 @@ namespace pcf
 		PLUGIFY_CONFIGS_API bool IsObject() const;
 		PLUGIFY_CONFIGS_API bool IsArray() const;
 
-		PLUGIFY_CONFIGS_API void Set(nullptr_t);
+		PLUGIFY_CONFIGS_API void SetNull();
+		PLUGIFY_CONFIGS_API void SetObject();
+		PLUGIFY_CONFIGS_API void SetArray();
+
+		inline void Set(nullptr_t) { SetNull(); };
 		PLUGIFY_CONFIGS_API void Set(bool value);
 		PLUGIFY_CONFIGS_API void Set(int32_t value);
 		PLUGIFY_CONFIGS_API void Set(int64_t value);
 		PLUGIFY_CONFIGS_API void Set(float value);
 		PLUGIFY_CONFIGS_API void Set(double value);
+		PLUGIFY_CONFIGS_API void Set(plg::string value);
+		inline void Set(cfobject_t) { SetObject(); };
+		inline void Set(cfarray_t) { SetArray(); };
 
 		PLUGIFY_CONFIGS_API plg::string NodeToJsonString() const;
 		PLUGIFY_CONFIGS_API plg::string RootToJsonString() const;
