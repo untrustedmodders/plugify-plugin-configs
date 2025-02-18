@@ -4,7 +4,7 @@
 #include <plugify/vector.hpp>
 #include <plugify/string.hpp>
 #include <map>
-#include <stack>
+#include <deque>
 #include <variant>
 #include <memory>
 
@@ -40,10 +40,20 @@ namespace pcf
 			void SetObject();
 			void SetArray();
 
+			Node* At(std::string_view key);
+			Node* First();
+			Node* Last();
+			Node* Next(Node* node);
+			Node* Prev(Node* node);
+
+			Node* Create(std::string_view key);
+
 			plg::string ToJsonString() const;
 
 		private:
 			StorageType _storage = ObjectType{};
+			ObjectType::iterator _objCache = std::get<ObjectType>(_storage).end();
+			ArrayType::iterator _arrCache = {};
 		};
 
 	public:
@@ -63,6 +73,14 @@ namespace pcf
 		void SetObject();
 		void SetArray();
 
+		bool JumpFirst();
+		bool JumpLast();
+		bool JumpNext();
+		bool JumpPrev();
+		bool JumpKey(std::string_view key, bool create);
+		bool JumpBack();
+		void JumpRoot();
+
 		plg::string NodeToJsonString() const;
 		plg::string RootToJsonString() const;
 
@@ -70,10 +88,11 @@ namespace pcf
 		Detail();
 
 		Node& GetCurrent() const;
+		Node* GetCurrentParent() const;
 
 	private:
 		Node::Ptr _root = std::make_unique<Config::Detail::Node>();
-		std::stack<Node*> _track;
+		std::deque<Node*> _track;
 	};
 
 	template<class T>

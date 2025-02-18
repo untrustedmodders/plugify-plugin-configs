@@ -47,6 +47,173 @@ namespace pcf
 		_arrCache = std::get<ArrayType>(_storage).end();
 	}
 
+	Config::Detail::Node* Config::Detail::Node::At(std::string_view key)
+	{
+		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
+			if (const auto it = object->find(key); it != object->end()) {
+				return it->second.get();
+			}
+		}
+
+		return nullptr;
+	}
+
+	Config::Detail::Node* Config::Detail::Node::First()
+	{
+		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
+			if (const auto it = object->begin(); it != object->end()) {
+				_objCache = it;
+				return it->second.get();
+			}
+		}
+		else if (auto* const arr = std::get_if<ArrayType>(&_storage)) {
+			if (const auto it = arr->begin(); it != arr->end()) {
+				_arrCache = it;
+				return it->get();
+			}
+		}
+
+		return nullptr;
+	}
+
+	Config::Detail::Node* Config::Detail::Node::Last()
+	{
+		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
+			if (const auto it = object->rbegin(); it != object->rend()) {
+				_objCache = it.base();
+				return it->second.get();
+			}
+		}
+		else if (auto* const arr = std::get_if<ArrayType>(&_storage)) {
+			if (const auto it = arr->rbegin(); it != arr->rend()) {
+				_arrCache = it.base();
+				return it->get();
+			}
+		}
+
+		return nullptr;
+	}
+
+	Config::Detail::Node* Config::Detail::Node::Next(Node* node)
+	{
+		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
+			if (_objCache != object->end() && _objCache->second.get() == node) {
+				ObjectType::iterator nextit = _objCache;
+				if (++nextit == object->end()) {
+					return nullptr;
+				}
+				_objCache = nextit;
+				return nextit->second.get();
+			}
+
+			for (auto it = object->begin(); it != object->end(); ++it) {
+				if (it->second.get() == node) {
+					_objCache = it;
+					ObjectType::iterator nextit = it;
+					if (++nextit == object->end()) {
+						return nullptr;
+					}
+					_objCache = nextit;
+					return nextit->second.get();
+				}
+			}
+
+			return nullptr;
+		}
+
+		if (auto* const arr = std::get_if<ArrayType>(&_storage)) {
+			if (_arrCache != arr->end() && _arrCache->get() == node) {
+				ArrayType::iterator nextit = _arrCache;
+				if (++nextit == arr->end()) {
+					return nullptr;
+				}
+				_arrCache = nextit;
+				return nextit->get();
+			}
+
+			for (auto it = arr->begin(); it != arr->end(); ++it) {
+				if (it->get() == node) {
+					_arrCache = it;
+					ArrayType::iterator nextit = it;
+					if (++nextit == arr->end()) {
+						return nullptr;
+					}
+					_arrCache = nextit;
+					return nextit->get();
+				}
+			}
+
+			return nullptr;
+		}
+
+		return nullptr;
+	}
+	
+	Config::Detail::Node* Config::Detail::Node::Prev(Node* node)
+	{
+		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
+			if (_objCache != object->end() && _objCache->second.get() == node) {
+				auto nextit = std::reverse_iterator<ObjectType::iterator>(_objCache);
+				if (++nextit == object->rend()) {
+					return nullptr;
+				}
+				_objCache = nextit.base();
+				return nextit->second.get();
+			}
+
+			for (auto it = object->rbegin(); it != object->rend(); ++it) {
+				if (it->second.get() == node) {
+					_objCache = it.base();
+					std::reverse_iterator<ObjectType::iterator> nextit = it;
+					if (++nextit == object->rend()) {
+						return nullptr;
+					}
+					_objCache = nextit.base();
+					return nextit->second.get();
+				}
+			}
+
+			return nullptr;
+		}
+
+		if (auto* const arr = std::get_if<ArrayType>(&_storage)) {
+			if (_arrCache != arr->end() && _arrCache->get() == node) {
+				auto nextit = std::reverse_iterator<ArrayType::iterator>(_arrCache);
+				if (++nextit == arr->rend()) {
+					return nullptr;
+				}
+				_arrCache = nextit.base();
+				return nextit->get();
+			}
+
+			for (auto it = arr->rbegin(); it != arr->rend(); ++it) {
+				if (it->get() == node) {
+					_arrCache = it.base();
+					std::reverse_iterator<ArrayType::iterator> nextit = it;
+					if (++nextit == arr->rend()) {
+						return nullptr;
+					}
+					_arrCache = nextit.base();
+					return nextit->get();
+				}
+			}
+
+			return nullptr;
+		}
+
+		return nullptr;
+	}
+
+	Config::Detail::Node* Config::Detail::Node::Create(std::string_view key)
+	{
+		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
+			const auto it = object->emplace(key, std::make_unique<Config::Detail::Node>());
+			return it->second.get();
+		}
+
+		return nullptr;
+	}
+
 	plg::string Config::Detail::Node::ToJsonString() const
 	{
 		plg::string json;
@@ -129,6 +296,90 @@ namespace pcf
 		GetCurrent().SetArray();
 	}
 
+	bool Config::Detail::JumpFirst()
+	{
+		Node* const node = GetCurrent().First();
+		if (node) {
+			_track.push_back(node);
+			return true;
+		}
+		return false;
+	}
+
+	bool Config::Detail::JumpLast()
+	{
+		Node* const node = GetCurrent().Last();
+		if (node) {
+			_track.push_back(node);
+			return true;
+		}
+		return false;
+	}
+
+	bool Config::Detail::JumpNext()
+	{
+		Node* const parent = GetCurrentParent();
+		if (!parent) {
+			return false;
+		}
+
+		Node* const next = parent->Next(_track.back());
+		if (!next) {
+			return false;
+		}
+
+		_track.pop_back();
+		_track.push_back(next);
+
+		return true;
+	}
+	
+	bool Config::Detail::JumpPrev()
+	{
+		Node* const parent = GetCurrentParent();
+		if (!parent) {
+			return false;
+		}
+
+		Node* const prev = parent->Prev(_track.back());
+		if (!prev) {
+			return false;
+		}
+
+		_track.pop_back();
+		_track.push_back(prev);
+
+		return true;
+	}
+
+	bool Config::Detail::JumpKey(std::string_view key, bool create)
+	{
+		auto& top = GetCurrent();
+		auto* node = top.At(key);
+		if (!node && create) {
+			node = top.Create(key);
+		}
+		if (node) {
+			_track.push_back(node);
+			return true;
+		}
+		return false;
+	}
+
+	bool Config::Detail::JumpBack()
+	{
+		if (_track.empty()) {
+			return false;
+		}
+		_track.pop_back();
+		return true;
+	}
+
+	void Config::Detail::JumpRoot()
+	{
+		_track = {};
+	}
+
 	plg::string Config::Detail::NodeToJsonString() const
 	{
 		return GetCurrent().ToJsonString();
@@ -142,10 +393,22 @@ namespace pcf
 	Config::Detail::Node& Config::Detail::GetCurrent() const
 	{
 		if (!_track.empty()) {
-			return *(_track.top());
+			return *(_track.back());
 		}
 
 		return *_root;
+	}
+
+	Config::Detail::Node* Config::Detail::GetCurrentParent() const
+	{
+		auto it = _track.crbegin();
+		if (it == _track.crend()) {
+			return nullptr;
+		}
+		if (--it == _track.crend()) {
+			return _root.get();
+		}
+		return *it;
 	}
 	
 
@@ -233,6 +496,42 @@ namespace pcf
 	{
 		_detail->SetArray();
 	}
+
+	bool Config::JumpFirst()
+	{
+		return _detail->JumpFirst();
+	}
+
+	bool Config::JumpLast()
+	{
+		return _detail->JumpLast();
+	}
+
+	bool Config::JumpNext()
+	{
+		return _detail->JumpNext();
+	}
+
+	bool Config::JumpPrev()
+	{
+		return _detail->JumpPrev();
+	}
+
+	bool Config::JumpKey(std::string_view key, bool create)
+	{
+		return _detail->JumpKey(key, create);
+	}
+
+	bool Config::JumpBack()
+	{
+		return _detail->JumpBack();
+	}
+
+	void Config::JumpRoot()
+	{
+		_detail->JumpRoot();
+	}
+
 
 	plg::string Config::NodeToJsonString() const
 	{

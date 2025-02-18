@@ -48,6 +48,14 @@ namespace pcf
 		inline void Set(cfobject_t) { SetObject(); };
 		inline void Set(cfarray_t) { SetArray(); };
 
+		PLUGIFY_CONFIGS_API bool JumpFirst();
+		PLUGIFY_CONFIGS_API bool JumpLast();
+		PLUGIFY_CONFIGS_API bool JumpNext();
+		PLUGIFY_CONFIGS_API bool JumpPrev();
+		PLUGIFY_CONFIGS_API bool JumpKey(std::string_view key, bool create = false);
+		PLUGIFY_CONFIGS_API bool JumpBack();
+		PLUGIFY_CONFIGS_API void JumpRoot();
+
 		PLUGIFY_CONFIGS_API plg::string NodeToJsonString() const;
 		PLUGIFY_CONFIGS_API plg::string RootToJsonString() const;
 
