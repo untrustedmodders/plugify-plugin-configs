@@ -1,4 +1,5 @@
 #include "config.hpp"
+#include <format>
 #include <string>
 
 namespace pcf
@@ -216,24 +217,44 @@ namespace pcf
 
 	plg::string Config::Detail::Node::ToJsonString() const
 	{
+		using namespace plg::string_literals;
+
 		plg::string json;
 
 		if (std::get_if<NullType>(&_storage)) {
-			json = "null";
+			json = "null"s;
 		}
 		else if (const bool* const boolValue = std::get_if<BoolType>(&_storage)) {
-			json = *boolValue ? "true" : "false";
+			json = *boolValue ? "true"s : "false"s;
 		}
 		else if (const int64_t* const numberValue = std::get_if<NumberType>(&_storage)) {
-			json = std::to_string(*numberValue);
+			json = plg::to_string(*numberValue);
 		}
 		else if (const double* const floatValue = std::get_if<FloatType>(&_storage)) {
-			json = std::to_string(*floatValue);
+			json = plg::to_string(*floatValue);
 		}
 		else if (const plg::string* const stringValue = std::get_if<StringType>(&_storage)) {
-			json += '\"';
-			json += *stringValue;
-			json += '\"';
+			std::format_to(std::back_inserter(json), "\"{}\"", *stringValue);
+		}
+		else if (const ObjectType* const objValue = std::get_if<ObjectType>(&_storage)) {
+			json.push_back('{');
+			if (!objValue->empty()) {
+				for (const auto& [name, node] : *objValue) {
+					std::format_to(std::back_inserter(json), "\"{}\":{},", name, node->ToJsonString());
+				}
+				json.erase(json.end() - 1, json.end());
+			}
+			json.push_back('}');
+		}
+		else if (const ArrayType* const arrValue = std::get_if<ArrayType>(&_storage)) {
+			json.push_back('[');
+			if (!arrValue->empty()) {
+				for (const auto& item : *arrValue) {
+					std::format_to(std::back_inserter(json), "{},", item->ToJsonString());
+				}
+				json.erase(json.end() - 1, json.end());
+			}
+			json.push_back(']');
 		}
 
 		return json;
