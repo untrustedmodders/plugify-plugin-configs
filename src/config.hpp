@@ -30,7 +30,8 @@ namespace pcf
 				|| std::is_same_v<T, FloatType> || std::is_same_v<T, StringType> || std::is_same_v<T, ObjectType> || std::is_same_v<T, ArrayType>;
 
 		public:
-			Node();
+			static Node::Ptr NewNode();
+			static Node::Ptr NewNullNode();
 
 		public:
 			NodeType GetType() const;
@@ -39,6 +40,9 @@ namespace pcf
 			void Set(T value);
 			void SetObject();
 			void SetArray();
+
+			Node* PushBack();
+			Node* PushBackNull();
 
 			Node* At(std::string_view key);
 			Node* First();
@@ -49,6 +53,10 @@ namespace pcf
 			Node* Create(std::string_view key);
 
 			plg::string ToJsonString() const;
+
+		private:
+			Node();
+			Node(nullptr_t);
 
 		private:
 			StorageType _storage = ObjectType{};
@@ -73,6 +81,14 @@ namespace pcf
 		void SetObject();
 		void SetArray();
 
+		void PushNull();
+		void PushBool(bool value);
+		void PushInt(int64_t value);
+		void PushFloat(double value);
+		void PushString(plg::string value);
+		void PushObject();
+		void PushArray();
+
 		bool JumpFirst();
 		bool JumpLast();
 		bool JumpNext();
@@ -91,7 +107,7 @@ namespace pcf
 		Node* GetCurrentParent() const;
 
 	private:
-		Node::Ptr _root = std::make_unique<Config::Detail::Node>();
+		Node::Ptr _root = Node::NewNode();
 		std::deque<Node*> _track;
 	};
 

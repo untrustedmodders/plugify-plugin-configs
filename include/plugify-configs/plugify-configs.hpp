@@ -48,6 +48,16 @@ namespace pcf
 		inline void Set(cfobject_t) { SetObject(); };
 		inline void Set(cfarray_t) { SetArray(); };
 
+		PLUGIFY_CONFIGS_API void PushNull();
+		PLUGIFY_CONFIGS_API void PushBool(bool value);
+		PLUGIFY_CONFIGS_API void PushInt32(int32_t value);
+		PLUGIFY_CONFIGS_API void PushInt64(int64_t value);
+		PLUGIFY_CONFIGS_API void PushFloat(float value);
+		PLUGIFY_CONFIGS_API void PushDouble(double value);
+		PLUGIFY_CONFIGS_API void PushString(plg::string value);
+		PLUGIFY_CONFIGS_API void PushObject();
+		PLUGIFY_CONFIGS_API void PushArray();
+
 		PLUGIFY_CONFIGS_API bool JumpFirst();
 		PLUGIFY_CONFIGS_API bool JumpLast();
 		PLUGIFY_CONFIGS_API bool JumpNext();

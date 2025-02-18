@@ -18,7 +18,22 @@ namespace pcf
 		}
 	}
 
+	Config::Detail::Node::Ptr Config::Detail::Node::NewNode()
+	{
+		return Ptr{ new Config::Detail::Node() };
+	}
+
+	Config::Detail::Node::Ptr Config::Detail::Node::NewNullNode()
+	{
+		return Ptr{ new Config::Detail::Node(nullptr) };
+	}
+
 	Config::Detail::Node::Node() = default;
+
+	Config::Detail::Node::Node(nullptr_t)
+		: _storage(nullptr)
+	{
+	}
 
 	Config::NodeType Config::Detail::Node::GetType() const
 	{
@@ -46,6 +61,26 @@ namespace pcf
 	{
 		_storage = ArrayType{};
 		_arrCache = std::get<ArrayType>(_storage).end();
+	}
+
+	Config::Detail::Node* Config::Detail::Node::PushBack()
+	{
+		if (auto* const arr = std::get_if<ArrayType>(&_storage)) {
+			_arrCache = arr->end();
+			return arr->emplace_back(NewNode()).get();
+		}
+
+		return nullptr;
+	}
+
+	Config::Detail::Node* Config::Detail::Node::PushBackNull()
+	{
+		if (auto* const arr = std::get_if<ArrayType>(&_storage)) {
+			_arrCache = arr->end();
+			return arr->emplace_back(NewNullNode()).get();
+		}
+
+		return nullptr;
 	}
 
 	Config::Detail::Node* Config::Detail::Node::At(std::string_view key)
@@ -208,7 +243,7 @@ namespace pcf
 	Config::Detail::Node* Config::Detail::Node::Create(std::string_view key)
 	{
 		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
-			const auto it = object->emplace(key, std::make_unique<Config::Detail::Node>());
+			const auto it = object->emplace(key, NewNode());
 			return it->second.get();
 		}
 
@@ -315,6 +350,56 @@ namespace pcf
 	void Config::Detail::SetArray()
 	{
 		GetCurrent().SetArray();
+	}
+
+	void Config::Detail::PushNull()
+	{
+		GetCurrent().PushBackNull();
+	}
+
+	void Config::Detail::PushBool(bool value)
+	{
+		Node* const node = GetCurrent().PushBackNull();
+		if (node) {
+			node->Set(value);
+		}
+	}
+
+	void Config::Detail::PushInt(int64_t value)
+	{
+		Node* const node = GetCurrent().PushBackNull();
+		if (node) {
+			node->Set(value);
+		}
+	}
+
+	void Config::Detail::PushFloat(double value)
+	{
+		Node* const node = GetCurrent().PushBackNull();
+		if (node) {
+			node->Set(value);
+		}
+	}
+
+	void Config::Detail::PushString(plg::string value)
+	{
+		Node* const node = GetCurrent().PushBackNull();
+		if (node) {
+			node->Set(std::move(value));
+		}
+	}
+
+	void Config::Detail::PushObject()
+	{
+		GetCurrent().PushBack();
+	}
+
+	void Config::Detail::PushArray()
+	{
+		Node* const node = GetCurrent().PushBackNull();
+		if (node) {
+			node->SetArray();
+		}
 	}
 
 	bool Config::Detail::JumpFirst()
@@ -517,6 +602,52 @@ namespace pcf
 	{
 		_detail->SetArray();
 	}
+
+	void Config::PushNull()
+	{
+		_detail->PushNull();
+	}
+
+	void Config::PushBool(bool value)
+	{
+		_detail->PushBool(value);
+	}
+
+	void Config::PushInt32(int32_t value)
+	{
+		_detail->PushInt(static_cast<int64_t>(value));
+	}
+
+	void Config::PushInt64(int64_t value)
+	{
+		_detail->PushInt(value);
+	}
+
+	void Config::PushFloat(float value)
+	{
+		_detail->PushFloat(static_cast<double>(value));
+	}
+
+	void Config::PushDouble(double value)
+	{
+		_detail->PushFloat(value);
+	}
+
+	void Config::PushString(plg::string value)
+	{
+		_detail->PushString(std::move(value));
+	}
+
+	void Config::PushObject()
+	{
+		_detail->PushObject();
+	}
+
+	void Config::PushArray()
+	{
+		_detail->PushArray();
+	}
+
 
 	bool Config::JumpFirst()
 	{
