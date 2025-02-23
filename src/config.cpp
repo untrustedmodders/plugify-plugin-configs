@@ -131,6 +131,29 @@ namespace pcf
 		return nullptr;
 	}
 
+	Config::Detail::Node* Config::Detail::Node::At(int n)
+	{
+		if (auto* const arr = std::get_if<ArrayType>(&_storage)) {
+			if (n >= 0) {
+				if (n < arr->size()) {
+					const auto it = arr->begin() + n;
+					_arrCache = it;
+					return it->get();
+				}
+			}
+			else {
+				const auto i = static_cast<size_t>(-n) - 1;
+				if (i < arr->size()) {
+					const auto it = arr->rbegin() + i;
+					_arrCache = it.base();
+					return it->get();
+				}
+			}
+		}
+
+		return nullptr;
+	}
+
 	Config::Detail::Node* Config::Detail::Node::First()
 	{
 		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
@@ -520,6 +543,17 @@ namespace pcf
 		return false;
 	}
 
+	bool Config::Detail::JumpN(int n)
+	{
+		auto& top = GetCurrent();
+		auto* node = top.At(n);
+		if (node) {
+			_track.push_back(node);
+			return true;
+		}
+		return false;
+	}
+
 	bool Config::Detail::JumpBack()
 	{
 		if (_track.empty()) {
@@ -749,6 +783,11 @@ namespace pcf
 	bool Config::JumpKey(std::string_view key, bool create)
 	{
 		return _detail->JumpKey(key, create);
+	}
+
+	bool Config::JumpN(int n)
+	{
+		return _detail->JumpN(n);
 	}
 
 	bool Config::JumpBack()

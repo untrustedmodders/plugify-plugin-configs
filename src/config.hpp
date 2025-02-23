@@ -50,6 +50,7 @@ namespace pcf
 			plg::string Get(std::string_view defaultValue) const;
 
 			Node* At(std::string_view key);
+			Node* At(int n);
 			Node* First();
 			Node* Last();
 			Node* Next(Node* node);
@@ -103,6 +104,7 @@ namespace pcf
 		bool JumpNext();
 		bool JumpPrev();
 		bool JumpKey(std::string_view key, bool create);
+		bool JumpN(int n);
 		bool JumpBack();
 		void JumpRoot();
 

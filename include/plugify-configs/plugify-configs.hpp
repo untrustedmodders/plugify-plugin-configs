@@ -71,6 +71,7 @@ namespace pcf
 		PLUGIFY_CONFIGS_API bool JumpNext();
 		PLUGIFY_CONFIGS_API bool JumpPrev();
 		PLUGIFY_CONFIGS_API bool JumpKey(std::string_view key, bool create = false);
+		PLUGIFY_CONFIGS_API bool JumpN(int n);
 		PLUGIFY_CONFIGS_API bool JumpBack();
 		PLUGIFY_CONFIGS_API void JumpRoot();
 
