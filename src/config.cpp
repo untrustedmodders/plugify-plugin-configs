@@ -31,7 +31,7 @@ namespace pcf
 	Config::Detail::Node::Node() = default;
 
 	Config::Detail::Node::Node(nullptr_t)
-		: _storage(nullptr)
+		: _storage(nullptr), _objCache{}
 	{
 	}
 
@@ -87,6 +87,7 @@ namespace pcf
 	{
 		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
 			if (const auto it = object->find(key); it != object->end()) {
+				_objCache = it;
 				return it->second.get();
 			}
 		}
@@ -511,7 +512,7 @@ namespace pcf
 		if (it == _track.crend()) {
 			return nullptr;
 		}
-		if (--it == _track.crend()) {
+		if (++it == _track.crend()) {
 			return _root.get();
 		}
 		return *it;
