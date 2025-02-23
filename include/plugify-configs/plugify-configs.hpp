@@ -1,6 +1,7 @@
 #pragma once
 #include "methods.hpp"
 #include <plugify_configs_export.h>
+#include <string_view>
 #include <memory>
 
 namespace pcf
@@ -57,6 +58,13 @@ namespace pcf
 		PLUGIFY_CONFIGS_API void PushString(plg::string value);
 		PLUGIFY_CONFIGS_API void PushObject();
 		PLUGIFY_CONFIGS_API void PushArray();
+
+		PLUGIFY_CONFIGS_API bool GetBool(bool defaultValue = {}) const;
+		PLUGIFY_CONFIGS_API int32_t GetInt32(int32_t defaultValue = {}) const;
+		PLUGIFY_CONFIGS_API int64_t GetInt64(int64_t defaultValue = {}) const;
+		PLUGIFY_CONFIGS_API float GetFloat(float defaultValue = {}) const;
+		PLUGIFY_CONFIGS_API double GetDouble(double defaultValue = {}) const;
+		PLUGIFY_CONFIGS_API plg::string GetString(std::string_view defaultValue = {}) const;
 
 		PLUGIFY_CONFIGS_API bool JumpFirst();
 		PLUGIFY_CONFIGS_API bool JumpLast();

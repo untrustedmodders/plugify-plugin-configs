@@ -44,6 +44,11 @@ namespace pcf
 			Node* PushBack();
 			Node* PushBackNull();
 
+			bool Get(bool defaultValue) const;
+			int64_t Get(int64_t defaultValue) const;
+			double Get(double defaultValue) const;
+			plg::string Get(std::string_view defaultValue) const;
+
 			Node* At(std::string_view key);
 			Node* First();
 			Node* Last();
@@ -88,6 +93,10 @@ namespace pcf
 		void PushString(plg::string value);
 		void PushObject();
 		void PushArray();
+
+		template<typename T>
+		T Get(T defaultValue) const;
+		plg::string Get(std::string_view defaultValue) const;
 
 		bool JumpFirst();
 		bool JumpLast();

@@ -83,6 +83,42 @@ namespace pcf
 		return nullptr;
 	}
 
+	bool Config::Detail::Node::Get(bool defaultValue) const
+	{
+		static_assert(std::is_same_v<BoolType, bool>);
+		if (const bool* const value = std::get_if<bool>(&_storage)) {
+			return *value;
+		}
+		return defaultValue;
+	}
+
+	int64_t Config::Detail::Node::Get(int64_t defaultValue) const
+	{
+		static_assert(std::is_same_v<NumberType, int64_t>);
+		if (const int64_t* const value = std::get_if<NumberType>(&_storage)) {
+			return *value;
+		}
+		return defaultValue;
+	}
+
+	double Config::Detail::Node::Get(double defaultValue) const
+	{
+		static_assert(std::is_same_v<FloatType, double>);
+		if (const double* const value = std::get_if<double>(&_storage)) {
+			return *value;
+		}
+		return defaultValue;
+	}
+
+	plg::string Config::Detail::Node::Get(std::string_view defaultValue) const
+	{
+		static_assert(std::is_same_v<StringType, plg::string>);
+		if (const plg::string* const value = std::get_if<plg::string>(&_storage)) {
+			return *value;
+		}
+		return { defaultValue };
+	}
+
 	Config::Detail::Node* Config::Detail::Node::At(std::string_view key)
 	{
 		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
@@ -403,6 +439,17 @@ namespace pcf
 		}
 	}
 
+	template<typename T>
+	T Config::Detail::Get(T defaultValue) const
+	{
+		return GetCurrent().Get(defaultValue);
+	}
+
+	plg::string Config::Detail::Get(std::string_view defaultValue) const
+	{
+		return GetCurrent().Get(defaultValue);
+	}
+
 	bool Config::Detail::JumpFirst()
 	{
 		Node* const node = GetCurrent().First();
@@ -649,6 +696,35 @@ namespace pcf
 		_detail->PushArray();
 	}
 
+	bool Config::GetBool(bool defaultValue) const
+	{
+		return _detail->Get(defaultValue);
+	}
+
+	int32_t Config::GetInt32(int32_t defaultValue) const
+	{
+		return static_cast<int32_t>(_detail->Get(static_cast<int64_t>(defaultValue)));
+	}
+
+	int64_t Config::GetInt64(int64_t defaultValue) const
+	{
+		return _detail->Get(defaultValue);
+	}
+
+	float Config::GetFloat(float defaultValue) const
+	{
+		return static_cast<float>(_detail->Get(static_cast<double>(defaultValue)));
+	}
+
+	double Config::GetDouble(double defaultValue) const
+	{
+		return _detail->Get(defaultValue);
+	}
+
+	plg::string Config::GetString(std::string_view defaultValue) const
+	{
+		return _detail->Get(defaultValue);
+	}
 
 	bool Config::JumpFirst()
 	{
