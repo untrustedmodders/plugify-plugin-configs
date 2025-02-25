@@ -75,6 +75,10 @@ namespace pcf
 		PLUGIFY_CONFIGS_API bool JumpBack();
 		PLUGIFY_CONFIGS_API void JumpRoot();
 
+		PLUGIFY_CONFIGS_API int Remove();
+		PLUGIFY_CONFIGS_API bool RemoveKey(std::string_view key);
+		PLUGIFY_CONFIGS_API void Clear();
+
 		PLUGIFY_CONFIGS_API plg::string NodeToJsonString() const;
 		PLUGIFY_CONFIGS_API plg::string RootToJsonString() const;
 

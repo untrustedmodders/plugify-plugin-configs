@@ -310,6 +310,64 @@ namespace pcf
 		return nullptr;
 	}
 
+	std::pair<Config::Detail::Node::Ptr, Config::Detail::Node*> Config::Detail::Node::Extract(Node* node)
+	{
+		std::pair<Ptr, Node*> result{};
+		auto& [extractedNode, nextNode] = result;
+
+		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
+			ObjectType::iterator nodeit = object->end();
+			if (_objCache != object->end() && _objCache->second.get() == node) {
+				nodeit = _objCache;
+			}
+			else {
+				for (auto it = object->begin(); it != object->end(); ++it) {
+					if (it->second.get() == node) {
+						nodeit = it;
+						break;
+					}
+				}
+			}
+
+			if (nodeit != object->end()) {
+				_objCache = object->end();
+				ObjectType::iterator nextit = std::next(nodeit);
+				if (nextit != object->end()) {
+					_objCache = nextit;
+					nextNode = nextit->second.get();
+				}
+				extractedNode = std::move(nodeit->second);
+				object->erase(nodeit);
+			}
+		}
+		else if (auto* const arr = std::get_if<ArrayType>(&_storage)) {
+			ArrayType::iterator nodeit = arr->end();
+
+			if (_arrCache != arr->end() && _arrCache->get() == node) {
+				nodeit = _arrCache;
+			}
+			else {
+				for (auto it = arr->begin(); it != arr->end(); ++it) {
+					if (it->get() == node) {
+						nodeit = it;
+						break;
+					}
+				}
+			}
+
+			if (nodeit != arr->end()) {
+				extractedNode = std::move(*nodeit);
+				ArrayType::iterator nextit = arr->erase(nodeit);
+				if (nextit != arr->end()) {
+					nextNode = nextit->get();
+				}
+				_arrCache = nextit;
+			}
+		}
+
+		return result;
+	}
+
 	plg::string Config::Detail::Node::ToJsonString() const
 	{
 		using namespace plg::string_literals;
@@ -568,6 +626,49 @@ namespace pcf
 		_track = {};
 	}
 
+	int Config::Detail::Remove()
+	{
+		Node* const parent = GetCurrentParent();
+		if (!parent) {
+			_root = Node::NewNode();
+			return 0;
+		}
+
+		auto&& [nodePtr, next] = parent->Extract(_track.back());
+		if (nodePtr) {
+			_track.pop_back();
+			if (next) {
+				_track.push_back(next);
+				return 1;
+			}
+			return -1;
+		}
+
+		return 0;
+	}
+	
+	bool Config::Detail::RemoveKey(std::string_view key)
+	{
+		if (key.empty()) {
+			return false;
+		}
+
+		auto& top = GetCurrent();
+		Node* const node = top.At(key);
+		if (node) {
+			auto&& [nodePtr, next] = top.Extract(node);
+			return static_cast<bool>(nodePtr);
+		}
+		
+		return false;
+	}
+	
+	void Config::Detail::Clear()
+	{
+		_track.clear();
+		_root = Node::NewNode();
+	}
+
 	plg::string Config::Detail::NodeToJsonString() const
 	{
 		return GetCurrent().ToJsonString();
@@ -800,6 +901,20 @@ namespace pcf
 		_detail->JumpRoot();
 	}
 
+	int Config::Remove()
+	{
+		return _detail->Remove();
+	}
+	
+	bool Config::RemoveKey(std::string_view key)
+	{
+		return _detail->RemoveKey(key);
+	}
+	
+	void Config::Clear()
+	{
+		_detail->Clear();
+	}
 
 	plg::string Config::NodeToJsonString() const
 	{

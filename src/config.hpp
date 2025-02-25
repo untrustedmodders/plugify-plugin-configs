@@ -57,6 +57,7 @@ namespace pcf
 			Node* Prev(Node* node);
 
 			Node* Create(std::string_view key);
+			std::pair<Node::Ptr, Node*> Extract(Node* node);
 
 			plg::string ToJsonString() const;
 
@@ -107,6 +108,10 @@ namespace pcf
 		bool JumpN(int n);
 		bool JumpBack();
 		void JumpRoot();
+
+		int Remove();
+		bool RemoveKey(std::string_view key);
+		void Clear();
 
 		plg::string NodeToJsonString() const;
 		plg::string RootToJsonString() const;
