@@ -9,6 +9,8 @@ namespace pcf
 	enum cfobject_t { cfobject };
 	enum cfarray_t { cfarray };
 
+	constexpr std::string_view rootName = { "##root##" };
+
 	class Config
 	{
 	public:
@@ -65,6 +67,11 @@ namespace pcf
 		PLUGIFY_CONFIGS_API float GetFloat(float defaultValue = {}) const;
 		PLUGIFY_CONFIGS_API double GetDouble(double defaultValue = {}) const;
 		PLUGIFY_CONFIGS_API plg::string GetString(std::string_view defaultValue = {}) const;
+
+		PLUGIFY_CONFIGS_API bool HasKey(std::string_view key) const;
+		PLUGIFY_CONFIGS_API bool Empty() const;
+		PLUGIFY_CONFIGS_API int64_t GetSize() const;
+		PLUGIFY_CONFIGS_API plg::string GetName() const;
 
 		PLUGIFY_CONFIGS_API bool JumpFirst();
 		PLUGIFY_CONFIGS_API bool JumpLast();

@@ -49,6 +49,11 @@ namespace pcf
 			double Get(double defaultValue) const;
 			plg::string Get(std::string_view defaultValue) const;
 
+			bool Has(std::string_view key) const;
+			bool Empty() const;
+			int64_t GetSize() const;
+			plg::string GetName(Node* node) const;
+
 			Node* At(std::string_view key);
 			Node* At(int n);
 			Node* First();
@@ -99,6 +104,11 @@ namespace pcf
 		template<typename T>
 		T Get(T defaultValue) const;
 		plg::string Get(std::string_view defaultValue) const;
+
+		bool HasKey(std::string_view key) const;
+		bool Empty() const;
+		int64_t GetSize() const;
+		plg::string GetName() const;
 
 		bool JumpFirst();
 		bool JumpLast();

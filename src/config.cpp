@@ -119,6 +119,73 @@ namespace pcf
 		return { defaultValue };
 	}
 
+	bool Config::Detail::Node::Has(std::string_view key) const
+	{
+		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
+			const auto it = object->find(key);
+			return it != object->end();
+		}
+
+		return false;
+	}
+
+	bool Config::Detail::Node::Empty() const
+	{
+		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
+			return object->empty();
+		}
+		if (auto* const arr = std::get_if<ArrayType>(&_storage)) {
+			return arr->empty();
+		}
+		if (auto* const str = std::get_if<StringType>(&_storage)) {
+			return str->empty();
+		}
+		if (auto* const ptr = std::get_if<NullType>(&_storage)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	int64_t Config::Detail::Node::GetSize() const
+	{
+		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
+			return static_cast<int64_t>(object->size());
+		}
+		if (auto* const arr = std::get_if<ArrayType>(&_storage)) {
+			return static_cast<int64_t>(arr->size());
+		}
+		if (auto* const str = std::get_if<StringType>(&_storage)) {
+			return static_cast<int64_t>(str->size());
+		}
+
+		return -1;
+	}
+
+	plg::string Config::Detail::Node::GetName(Node* node) const
+	{
+		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
+			ObjectType::const_iterator nodeit = object->cend();
+			if (_objCache != object->cend() && _objCache->second.get() == node) {
+				nodeit = _objCache;
+			}
+			else {
+				for (auto it = object->cbegin(); it != object->cend(); ++it) {
+					if (it->second.get() == node) {
+						nodeit = it;
+						break;
+					}
+				}
+			}
+
+			if (nodeit != object->cend()) {
+				return nodeit->first;
+			}
+		}
+
+		return {};
+	}
+
 	Config::Detail::Node* Config::Detail::Node::At(std::string_view key)
 	{
 		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
@@ -531,6 +598,31 @@ namespace pcf
 		return GetCurrent().Get(defaultValue);
 	}
 
+	bool Config::Detail::HasKey(std::string_view key) const
+	{
+		return GetCurrent().Has(key);
+	}
+
+	bool Config::Detail::Empty() const
+	{
+		return GetCurrent().Empty();
+	}
+
+	int64_t Config::Detail::GetSize() const
+	{
+		return GetCurrent().GetSize();
+	}
+
+	plg::string Config::Detail::GetName() const
+	{
+		Node* const parent = GetCurrentParent();
+		if (!parent) {
+			return rootName;
+		}
+
+		return parent->GetName(_track.back());
+	}
+
 	bool Config::Detail::JumpFirst()
 	{
 		Node* const node = GetCurrent().First();
@@ -859,6 +951,26 @@ namespace pcf
 	plg::string Config::GetString(std::string_view defaultValue) const
 	{
 		return _detail->Get(defaultValue);
+	}
+
+	bool Config::HasKey(std::string_view key) const
+	{
+		return _detail->HasKey(key);
+	}
+
+	bool Config::Empty() const
+	{
+		return _detail->Empty();
+	}
+
+	int64_t Config::GetSize() const
+	{
+		return _detail->GetSize();
+	}
+
+	plg::string Config::GetName() const
+	{
+		return _detail->GetName();
 	}
 
 	bool Config::JumpFirst()
