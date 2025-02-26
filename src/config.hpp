@@ -34,6 +34,14 @@ namespace pcf
 			static Node::Ptr NewNullNode();
 
 		public:
+			template<class SoruceType>
+				requires std::is_same_v<Config::Detail::Node::Ptr, std::remove_cvref_t<SoruceType>>
+			static void MergeNodes(Node::Ptr& destanation, SoruceType&& source);
+			static void MergeObject(Node::Ptr& destanation, const Node::Ptr& source, const ObjectType& objectSource);
+			static void MergeObject(Node::Ptr& destanation, Node::Ptr&& source, ObjectType& objectSource);
+			static void MergeArray(Node::Ptr& destanation, const Node::Ptr& source, const ArrayType& arrSource);
+			static void MergeArray(Node::Ptr& destanation, Node::Ptr&& source, ArrayType& arrSource);
+
 			NodeType GetType() const;
 
 			template<class T>
@@ -78,6 +86,8 @@ namespace pcf
 
 	public:
 		static std::unique_ptr<Config> MakeConfig();
+		void Merge(const Detail& other);
+		void MergeMove(Detail&& other);
 
 		NodeType GetType() const;
 		bool IsNull() const;

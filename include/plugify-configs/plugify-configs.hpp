@@ -28,6 +28,9 @@ namespace pcf
 	public:
 		PLUGIFY_CONFIGS_API virtual ~Config();
 
+		PLUGIFY_CONFIGS_API void Merge(const Config& other);
+		PLUGIFY_CONFIGS_API void MergeMove(Config&& other);
+
 		PLUGIFY_CONFIGS_API NodeType GetType() const;
 		PLUGIFY_CONFIGS_API bool IsNull() const;
 		PLUGIFY_CONFIGS_API bool IsBool() const;

@@ -16,6 +16,7 @@ namespace pcf
 
 	public:
 		std::unique_ptr<Config> ReadConfig(std::string_view path);
+		std::unique_ptr<Config> ReadConfigs(const plg::vector<std::string_view>& paths);
 		void SetError(std::string_view error);
 		plg::string GetError();
 

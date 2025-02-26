@@ -18,6 +18,95 @@ namespace pcf
 		}
 	}
 
+	template<class SoruceType>
+		requires std::is_same_v<Config::Detail::Node::Ptr, std::remove_cvref_t<SoruceType>>
+	void Config::Detail::Node::MergeNodes(Config::Detail::Node::Ptr& destanation, SoruceType&& source)
+	{
+		if (std::get_if<NullType>(&source->_storage)) {
+			destanation->_storage = nullptr;
+		}
+		else if (auto* const boolSource = std::get_if<BoolType>(&source->_storage)) {
+			destanation->_storage = *boolSource;
+		}
+		else if (auto* const numberSource = std::get_if<NumberType>(&source->_storage)) {
+			destanation->_storage = *numberSource;
+		}
+		else if (auto* const floatSource = std::get_if<FloatType>(&source->_storage)) {
+			destanation->_storage = *floatSource;
+		}
+		else if (auto* const stringSource = std::get_if<StringType>(&source->_storage)) {
+			destanation->_storage = *stringSource;
+		}
+		else if (auto* const objectSource = std::get_if<ObjectType>(&source->_storage)) {
+			MergeObject(destanation, std::forward<SoruceType>(source), *objectSource);
+		}
+		else if (auto* const arrSource = std::get_if<ArrayType>(&source->_storage)) {
+			MergeArray(destanation, std::forward<SoruceType>(source), *arrSource);
+		}
+	}
+
+	void Config::Detail::Node::MergeObject(Node::Ptr& destanation, [[maybe_unused]] const Node::Ptr& source, const ObjectType& objectSource)
+	{
+		auto* objectDest = std::get_if<ObjectType>(&destanation->_storage);
+		if (!objectDest) {
+			objectDest = &destanation->_storage.emplace<ObjectType>();
+		}
+		for (auto& [name, ptr] : objectSource) {
+			auto destit = objectDest->find(name);
+			if (destit == objectDest->end()) {
+				destit = objectDest->emplace(name, NewNullNode());
+			}
+			MergeNodes(destit->second, ptr);
+		}
+	}
+
+	void Config::Detail::Node::MergeObject(Node::Ptr& destanation, Node::Ptr&& source, ObjectType& objectSource)
+	{
+		if (auto* objectDest = std::get_if<ObjectType>(&destanation->_storage)) {
+			for (auto& [name, ptr] : objectSource) {
+				if (auto destit = objectDest->find(name); destit != objectDest->end()) {
+					destit->second = std::move(ptr);
+				}
+				else {
+					objectDest->emplace(name, std::move(ptr));
+				}
+			}
+		}
+		else {
+			destanation = std::move(source);
+		}
+	}
+
+	void Config::Detail::Node::MergeArray(Node::Ptr& destanation, [[maybe_unused]] const Node::Ptr& source, const ArrayType& arrSource)
+	{
+		auto* arrDest = std::get_if<ArrayType>(&destanation->_storage);
+		if (!arrDest) {
+			arrDest = &destanation->_storage.emplace<ArrayType>();
+		}
+		auto srcit = arrSource.begin();
+		auto destit = arrDest->end();
+		for (; srcit != arrSource.end(); ++srcit) {
+			destit = arrDest->emplace(destit, NewNullNode());
+			MergeNodes(*destit, *srcit);
+			++destit;
+		}
+	}
+
+	void Config::Detail::Node::MergeArray(Node::Ptr& destanation, Node::Ptr&& source, ArrayType& arrSource)
+	{
+		if (auto* arrDest = std::get_if<ArrayType>(&destanation->_storage)) {
+			auto srcit = arrSource.begin();
+			auto destit = arrDest->end();
+			for (; srcit != arrSource.end(); ++srcit) {
+				destit = arrDest->emplace(destit, std::move(*srcit));
+				++destit;
+			}
+		}
+		else {
+			destanation = std::move(source);
+		}
+	}
+
 	Config::Detail::Node::Ptr Config::Detail::Node::NewNode()
 	{
 		return Ptr{ new Config::Detail::Node() };
@@ -487,6 +576,20 @@ namespace pcf
 
 	Config::Detail::Detail() = default;
 
+	void Config::Detail::Merge(const Detail& other)
+	{
+		_track.clear();
+		Node::MergeNodes(_root, other._root);
+	}
+
+	void Config::Detail::MergeMove(Detail&& other)
+	{
+		_track.clear();
+		other._track.clear();
+		Node::MergeNodes(_root, std::move(other._root));
+		other._root = Node::NewNode();
+	}
+
 	Config::NodeType Config::Detail::GetType() const
 	{
 		return GetCurrent().GetType();
@@ -792,6 +895,16 @@ namespace pcf
 		return *it;
 	}
 	
+
+	void Config::Merge(const Config& other)
+	{
+		_detail->Merge(*(other._detail));
+	}
+
+	void Config::MergeMove(Config&& other)
+	{
+		_detail->MergeMove(std::move(*(other._detail)));
+	}
 
 	Config::NodeType Config::GetType() const
 	{

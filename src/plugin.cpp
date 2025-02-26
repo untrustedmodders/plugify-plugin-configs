@@ -35,6 +35,43 @@ namespace pcf
 		return config;
 	}
 
+	std::unique_ptr<Config> ConfigsPlugin::ReadConfigs(const plg::vector<std::string_view>& paths)
+	{
+		_error.clear();
+
+		if (!_factory) {
+			_error = "Factory is null";
+			return nullptr;
+		}
+
+		if (paths.empty()) {
+			_error = "Empty paths array";
+			return nullptr;
+		}
+
+		auto config = MakeConfig();
+		if (!config) {
+			_error = "Failed to make config";
+			return nullptr;
+		}
+
+		for (std::string_view path : paths) {
+			namespace fs = std::filesystem;
+			if (fs::exists(path)) {
+				auto overrideConfig = _factory->ReadConfig(path);
+				if (!overrideConfig) {
+					if (_error.length() == 0) {
+						// TODO: Log error: No error is setted while config parse failure
+					}
+					return nullptr;
+				}
+				config->MergeMove(std::move(*overrideConfig));
+			}
+		}
+
+		return config;
+	}
+
 	void ConfigsPlugin::SetError(std::string_view error)
 	{
 		_error = error;
