@@ -49,6 +49,9 @@ namespace pcf
 			void SetObject();
 			void SetArray();
 
+			template<class T>
+			bool TrySetFrom(T value);
+
 			Node* PushBack();
 			Node* PushBackNull();
 
@@ -102,6 +105,9 @@ namespace pcf
 		void Set(T value);
 		void SetObject();
 		void SetArray();
+
+		template<class T> requires Config::Detail::Node::is_storable_v<T> || std::is_same_v<T, std::string_view>
+		bool TrySetFrom(T value);
 
 		void PushNull();
 		void PushBool(bool value);

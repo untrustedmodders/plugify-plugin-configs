@@ -152,6 +152,97 @@ namespace pcf
 		_arrCache = std::get<ArrayType>(_storage).end();
 	}
 
+	template<class T>
+	bool Config::Detail::Node::TrySetFrom(T value)
+	{
+		static_assert(
+			std::is_same_v<T, BoolType>
+			|| std::is_same_v<T, NumberType>
+			|| std::is_same_v<T, FloatType>
+			|| std::is_same_v<T, StringType>
+		);
+		switch (_storage.index()) {
+		case variant_index<StorageType, BoolType>():
+			Set(static_cast<BoolType>(value));
+			return true;
+		case variant_index<StorageType, NumberType>():
+			Set(static_cast<NumberType>(value));
+			return true;
+		case variant_index<StorageType, FloatType>():
+			Set(static_cast<FloatType>(value));
+			return true;
+		case variant_index<StorageType, StringType>():
+			Set(plg::to_string(value));
+			return true;
+		}
+
+		return false;
+	}
+
+	template<>
+	bool Config::Detail::Node::TrySetFrom(std::string_view value)
+	{
+		if (!value.empty()) {
+			switch (_storage.index()) {
+			case variant_index<StorageType, BoolType>():
+				switch (value[0]) {
+				case 't':
+				case 'T':
+					if (value.substr(1).starts_with("rue")) {
+						Set(true);
+						return true;
+					}
+					break;
+				case 'f':
+				case 'F':
+					if (value.substr(1).starts_with("alse")) {
+						Set(false);
+						return true;
+					}
+					break;
+				case '1':
+					if (value.size() == 1) {
+						Set(true);
+						return true;
+					}
+					break;
+				case '0':
+					if (value.size() == 1) {
+						Set(false);
+						return true;
+					}
+					break;
+				}
+				break;
+			case variant_index<StorageType, NumberType>():
+			{
+				int64_t result = 0;
+				auto [ptr, _] = std::from_chars(value.data(), value.data() + value.size(), result);
+				if (ptr == value.data() + value.size()) {
+					Set(result);
+					return true;
+				}
+				break;
+			}
+			case variant_index<StorageType, FloatType>():
+			{
+				double result = 0;
+				auto [ptr, _] = std::from_chars(value.data(), value.data() + value.size(), result);
+				if (ptr == value.data() + value.size()) {
+					Set(result);
+					return true;
+				}
+				break;
+			}
+			case variant_index<StorageType, StringType>():
+				Set(plg::string(value));
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	Config::Detail::Node* Config::Detail::Node::PushBack()
 	{
 		if (auto* const arr = std::get_if<ArrayType>(&_storage)) {
@@ -640,6 +731,12 @@ namespace pcf
 		GetCurrent().SetArray();
 	}
 
+	template<class T> requires Config::Detail::Node::is_storable_v<T> || std::is_same_v<T, std::string_view>
+	bool Config::Detail::TrySetFrom(T value)
+	{
+		return GetCurrent().TrySetFrom(value);
+	}
+
 	void Config::Detail::PushNull()
 	{
 		GetCurrent().PushBackNull();
@@ -989,6 +1086,36 @@ namespace pcf
 	void Config::SetArray()
 	{
 		_detail->SetArray();
+	}
+
+	bool Config::TrySetFromBool(bool value)
+	{
+		return _detail->TrySetFrom(value);
+	}
+
+	bool Config::TrySetFromInt32(int32_t value)
+	{
+		return _detail->TrySetFrom(static_cast<int64_t>(value));
+	}
+
+	bool Config::TrySetFromInt64(int64_t value)
+	{
+		return _detail->TrySetFrom(value);
+	}
+
+	bool Config::TrySetFromFloat(float value)
+	{
+		return _detail->TrySetFrom(static_cast<double>(value));
+	}
+
+	bool Config::TrySetFromDouble(double value)
+	{
+		return _detail->TrySetFrom(value);
+	}
+
+	bool Config::TrySetFromString(std::string_view value)
+	{
+		return _detail->TrySetFrom(value);
 	}
 
 	void Config::PushNull()

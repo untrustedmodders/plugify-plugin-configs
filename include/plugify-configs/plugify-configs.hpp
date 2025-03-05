@@ -54,6 +54,13 @@ namespace pcf
 		inline void Set(cfobject_t) { SetObject(); };
 		inline void Set(cfarray_t) { SetArray(); };
 
+		PLUGIFY_CONFIGS_API bool TrySetFromBool(bool value);
+		PLUGIFY_CONFIGS_API bool TrySetFromInt32(int32_t value);
+		PLUGIFY_CONFIGS_API bool TrySetFromInt64(int64_t value);
+		PLUGIFY_CONFIGS_API bool TrySetFromFloat(float value);
+		PLUGIFY_CONFIGS_API bool TrySetFromDouble(double value);
+		PLUGIFY_CONFIGS_API bool TrySetFromString(std::string_view value);
+
 		PLUGIFY_CONFIGS_API void PushNull();
 		PLUGIFY_CONFIGS_API void PushBool(bool value);
 		PLUGIFY_CONFIGS_API void PushInt32(int32_t value);
