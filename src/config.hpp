@@ -60,6 +60,10 @@ namespace pcf
 			double Get(double defaultValue) const;
 			plg::string Get(std::string_view defaultValue) const;
 
+			template<class T>
+			T GetAs(T defaultValue) const;
+			plg::string GetAs(std::string_view defaultValue) const;
+
 			bool Has(std::string_view key) const;
 			bool Empty() const;
 			int64_t GetSize() const;
@@ -120,6 +124,10 @@ namespace pcf
 		template<typename T>
 		T Get(T defaultValue) const;
 		plg::string Get(std::string_view defaultValue) const;
+
+		template<typename T>
+		T GetAs(T defaultValue) const;
+		plg::string GetAs(std::string_view defaultValue) const;
 
 		bool HasKey(std::string_view key) const;
 		bool Empty() const;

@@ -78,6 +78,13 @@ namespace pcf
 		PLUGIFY_CONFIGS_API double GetDouble(double defaultValue = {}) const;
 		PLUGIFY_CONFIGS_API plg::string GetString(std::string_view defaultValue = {}) const;
 
+		PLUGIFY_CONFIGS_API bool GetAsBool(bool defaultValue = {}) const;
+		PLUGIFY_CONFIGS_API int32_t GetAsInt32(int32_t defaultValue = {}) const;
+		PLUGIFY_CONFIGS_API int64_t GetAsInt64(int64_t defaultValue = {}) const;
+		PLUGIFY_CONFIGS_API float GetAsFloat(float defaultValue = {}) const;
+		PLUGIFY_CONFIGS_API double GetAsDouble(double defaultValue = {}) const;
+		PLUGIFY_CONFIGS_API plg::string GetAsString(std::string_view defaultValue = {}) const;
+
 		PLUGIFY_CONFIGS_API bool HasKey(std::string_view key) const;
 		PLUGIFY_CONFIGS_API bool Empty() const;
 		PLUGIFY_CONFIGS_API int64_t GetSize() const;

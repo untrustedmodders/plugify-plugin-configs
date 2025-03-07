@@ -18,6 +18,70 @@ namespace pcf
 		}
 	}
 
+	template<class T>
+	std::optional<T> ValueFromChars(std::string_view str);
+
+	template<>
+	std::optional<bool> ValueFromChars(std::string_view str)
+	{
+		if (!str.empty()) {
+			switch (str[0]) {
+			case 't':
+			case 'T':
+				if (str.substr(1).starts_with("rue")) {
+					return true;
+				}
+				break;
+			case 'f':
+			case 'F':
+				if (str.substr(1).starts_with("alse")) {
+					return false;
+				}
+				break;
+			case '1':
+				if (str.size() == 1) {
+					return true;
+				}
+				break;
+			case '0':
+				if (str.size() == 1) {
+					return false;
+				}
+				break;
+			}
+		}
+
+		return std::nullopt;
+	}
+
+	template<>
+	std::optional<int64_t> ValueFromChars(std::string_view str)
+	{
+		if (!str.empty()) {
+			int64_t result = 0;
+			auto [ptr, _] = std::from_chars(str.data(), str.data() + str.size(), result);
+			if (ptr == str.data() + str.size()) {
+				return result;
+			}
+		}
+
+		return std::nullopt;
+	}
+
+	template<>
+	std::optional<double> ValueFromChars(std::string_view str)
+	{
+		if (!str.empty()) {
+			double result = 0;
+			auto [ptr, _] = std::from_chars(str.data(), str.data() + str.size(), result);
+			if (ptr == str.data() + str.size()) {
+				return result;
+			}
+		}
+
+		return std::nullopt;
+	}
+
 	template<class SoruceType>
 		requires std::is_same_v<Config::Detail::Node::Ptr, std::remove_cvref_t<SoruceType>>
 	void Config::Detail::Node::MergeNodes(Config::Detail::Node::Ptr& destanation, SoruceType&& source)
@@ -185,55 +249,23 @@ namespace pcf
 		if (!value.empty()) {
 			switch (_storage.index()) {
 			case variant_index<StorageType, BoolType>():
-				switch (value[0]) {
-				case 't':
-				case 'T':
-					if (value.substr(1).starts_with("rue")) {
-						Set(true);
-						return true;
-					}
-					break;
-				case 'f':
-				case 'F':
-					if (value.substr(1).starts_with("alse")) {
-						Set(false);
-						return true;
-					}
-					break;
-				case '1':
-					if (value.size() == 1) {
-						Set(true);
-						return true;
-					}
-					break;
-				case '0':
-					if (value.size() == 1) {
-						Set(false);
-						return true;
-					}
-					break;
+				if (auto result = ValueFromChars<BoolType>(value)) {
+					Set(*result);
+					return true;
 				}
 				break;
 			case variant_index<StorageType, NumberType>():
-			{
-				int64_t result = 0;
-				auto [ptr, _] = std::from_chars(value.data(), value.data() + value.size(), result);
-				if (ptr == value.data() + value.size()) {
-					Set(result);
+				if (auto result = ValueFromChars<NumberType>(value)) {
+					Set(*result);
 					return true;
 				}
 				break;
-			}
 			case variant_index<StorageType, FloatType>():
-			{
-				double result = 0;
-				auto [ptr, _] = std::from_chars(value.data(), value.data() + value.size(), result);
-				if (ptr == value.data() + value.size()) {
-					Set(result);
+				if (auto result = ValueFromChars<FloatType>(value)) {
+					Set(*result);
 					return true;
 				}
 				break;
-			}
 			case variant_index<StorageType, StringType>():
 				Set(plg::string(value));
 				return true;
@@ -296,6 +328,48 @@ namespace pcf
 		if (const plg::string* const value = std::get_if<plg::string>(&_storage)) {
 			return *value;
 		}
+		return { defaultValue };
+	}
+
+	template<class T>
+	T Config::Detail::Node::GetAs(T defaultValue) const
+	{
+		static_assert(
+			std::is_same_v<T, BoolType>
+			|| std::is_same_v<T, NumberType>
+			|| std::is_same_v<T, FloatType>
+			|| std::is_same_v<T, StringType>
+		);
+		switch (_storage.index()) {
+		case variant_index<StorageType, BoolType>():
+			return static_cast<T>(std::get<BoolType>(_storage));
+		case variant_index<StorageType, NumberType>():
+			return static_cast<T>(std::get<NumberType>(_storage));
+		case variant_index<StorageType, FloatType>():
+			return static_cast<T>(std::get<FloatType>(_storage));
+		case variant_index<StorageType, StringType>():
+			if (auto result = ValueFromChars<T>({ std::get<StringType>(_storage) })) {
+				return *result;
+			}
+			break;
+		}
+
+		return defaultValue;
+	}
+
+	plg::string Config::Detail::Node::GetAs(std::string_view defaultValue) const
+	{
+		switch (_storage.index()) {
+		case variant_index<StorageType, BoolType>():
+			return plg::to_string(std::get<BoolType>(_storage));
+		case variant_index<StorageType, NumberType>():
+			return plg::to_string(std::get<NumberType>(_storage));
+		case variant_index<StorageType, FloatType>():
+			return plg::to_string(std::get<FloatType>(_storage));
+		case variant_index<StorageType, StringType>():
+			return std::get<StringType>(_storage);
+		}
+
 		return { defaultValue };
 	}
 
@@ -798,6 +872,17 @@ namespace pcf
 		return GetCurrent().Get(defaultValue);
 	}
 
+	template<typename T>
+	T Config::Detail::GetAs(T defaultValue) const
+	{
+		return GetCurrent().GetAs(defaultValue);
+	}
+
+	plg::string Config::Detail::GetAs(std::string_view defaultValue) const
+	{
+		return GetCurrent().GetAs(defaultValue);
+	}
+
 	bool Config::Detail::HasKey(std::string_view key) const
 	{
 		return GetCurrent().Has(key);
@@ -1191,6 +1276,36 @@ namespace pcf
 	plg::string Config::GetString(std::string_view defaultValue) const
 	{
 		return _detail->Get(defaultValue);
+	}
+
+	bool Config::GetAsBool(bool defaultValue) const
+	{
+		return _detail->GetAs<bool>(defaultValue);
+	}
+
+	int32_t Config::GetAsInt32(int32_t defaultValue) const
+	{
+		return static_cast<int32_t>(_detail->GetAs<int64_t>(int64_t{ defaultValue }));
+	}
+
+	int64_t Config::GetAsInt64(int64_t defaultValue) const
+	{
+		return _detail->GetAs<int64_t>(defaultValue);
+	}
+
+	float Config::GetAsFloat(float defaultValue) const
+	{
+		return static_cast<float>(_detail->GetAs<double>(double{ defaultValue }));
+	}
+
+	double Config::GetAsDouble(double defaultValue) const
+	{
+		return _detail->GetAs<double>(defaultValue);
+	}
+
+	plg::string Config::GetAsString(std::string_view defaultValue) const
+	{
+		return _detail->GetAs(defaultValue);
 	}
 
 	bool Config::HasKey(std::string_view key) const
