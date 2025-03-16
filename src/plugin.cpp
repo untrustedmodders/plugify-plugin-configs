@@ -85,4 +85,4 @@ namespace pcf
 	ConfigsPlugin plugin;
 }
 
-EXPOSE_PLUGIN(PLUGIFY_CONFIGS_API, &pcf::plugin)
+EXPOSE_PLUGIN(PLUGIFY_CONFIGS_API, pcf::ConfigsPlugin, &pcf::plugin)
