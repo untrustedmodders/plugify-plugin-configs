@@ -1,0 +1,18 @@
+{
+  "fileVersion": 1,
+  "version": "${CONFIGS_VERSION}",
+  "friendlyName": "Configs Plugin",
+  "description": "A plugin that provides a system to read and write configuration files.",
+  "createdBy": "untrustedmodders",
+  "createdByURL": "https://github.com/untrustedmodders/",
+  "docsURL": "https://github.com/untrustedmodders/plugify-configs",
+  "downloadURL": "https://github.com/untrustedmodders/plugify-configs/releases/download/v${CONFIGS_VERSION}/${CONFIGS_PACKAGE}.zip",
+  "updateURL": "https://untrustedmodders.github.io/plugify-configs/plugify-configs.json",
+  "entryPoint": "bin/plugify-configs",
+  "supportedPlatforms": [],
+  "languageModule": {
+    "name": "cpp"
+  },
+  "dependencies": [],
+  "exportedMethods": []
+}
