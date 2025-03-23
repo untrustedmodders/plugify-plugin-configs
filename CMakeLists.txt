@@ -61,3 +61,14 @@ if(NOT COMPILER_SUPPORTS_FORMAT)
 endif()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE glaze::glaze)
+
+file(READ "${CMAKE_SOURCE_DIR}/version.txt" VERSION_FILE_CONTENTS)
+string(STRIP "${VERSION_FILE_CONTENTS}" VERSION_FILE_CONTENTS)
+set(CONFIGS_VERSION "${VERSION_FILE_CONTENTS}" CACHE STRING "Set version name")
+set(CONFIGS_PACKAGE "${PROJECT_NAME}" CACHE STRING "Set package name")
+string(REPLACE "v" "" CONFIGS_VERSION "${CONFIGS_VERSION}")
+
+configure_file(
+    ${CMAKE_SOURCE_DIR}/plugify-configs.pplugin.in
+    ${CMAKE_BINARY_DIR}/plugify-configs.pplugin
+)
