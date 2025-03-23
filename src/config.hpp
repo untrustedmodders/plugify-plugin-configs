@@ -64,7 +64,6 @@ namespace pcf
 			T GetAs(T defaultValue) const;
 			plg::string GetAs(std::string_view defaultValue) const;
 
-			bool Has(std::string_view key) const;
 			bool Empty() const;
 			int64_t GetSize() const;
 			plg::string GetName(Node* node) const;
@@ -106,12 +105,12 @@ namespace pcf
 		bool IsArray() const;
 
 		template<typename T> requires Config::Detail::Node::is_storable_v<T>
-		void Set(T value);
-		void SetObject();
-		void SetArray();
+		void Set(std::string_view key, T value);
+		void SetObject(std::string_view key);
+		void SetArray(std::string_view key);
 
 		template<class T> requires Config::Detail::Node::is_storable_v<T> || std::is_same_v<T, std::string_view>
-		bool TrySetFrom(T value);
+		bool TrySetFrom(std::string_view key, T value);
 
 		void PushNull();
 		void PushBool(bool value);
@@ -122,17 +121,18 @@ namespace pcf
 		void PushArray();
 
 		template<typename T>
-		T Get(T defaultValue) const;
-		plg::string Get(std::string_view defaultValue) const;
+		T Get(std::string_view key, T defaultValue) const;
+		plg::string Get(std::string_view key, std::string_view defaultValue) const;
 
 		template<typename T>
-		T GetAs(T defaultValue) const;
-		plg::string GetAs(std::string_view defaultValue) const;
+		T GetAs(std::string_view key, T defaultValue) const;
+		plg::string GetAs(std::string_view key, std::string_view defaultValue) const;
 
 		bool HasKey(std::string_view key) const;
 		bool Empty() const;
 		int64_t GetSize() const;
 		plg::string GetName() const;
+		plg::string GetPath() const;
 
 		bool JumpFirst();
 		bool JumpLast();
@@ -155,22 +155,11 @@ namespace pcf
 
 		Node& GetCurrent() const;
 		Node* GetCurrentParent() const;
+		Node* GetByPath(std::string_view key) const;
+		Node* GetByPath(std::string_view key, bool track, bool create);
 
 	private:
 		Node::Ptr _root = Node::NewNode();
 		std::deque<Node*> _track;
 	};
-
-	template<class T>
-	void Config::Detail::Node::Set(T value)
-	{
-		static_assert(is_storable_v<T>);
-		_storage = std::move(value);
-	}
-
-	template <typename T> requires Config::Detail::Node::is_storable_v<T>
-	void Config::Detail::Set(T value)
-	{
-		GetCurrent().Set(std::move(value));
-	}
 }

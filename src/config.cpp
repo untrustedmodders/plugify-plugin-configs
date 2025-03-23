@@ -4,6 +4,31 @@
 
 namespace pcf
 {
+	static std::pair<std::string_view, std::string_view> SplitSlash(std::string_view s)
+	{
+		const auto n = s.find_first_of('/');
+		if (n == std::string_view::npos) {
+			return { s, {} };
+		}
+		if (s.size() > n + 1) {
+			return { s.substr(0, n), s.substr(n + 1) };
+		}
+		return { s.substr(0, n), {} };
+	}
+
+	static std::vector<std::string_view> SplitKey(std::string_view key)
+	{
+		std::vector<std::string_view> parts;
+		std::string_view remainder = key;
+		while (!remainder.empty())
+		{
+			std::string_view key_part;
+			std::tie(key_part, remainder) = SplitSlash(remainder);
+			parts.push_back(key_part);
+		}
+		return parts;
+	}
+
 	template<typename VariantType, typename T, std::size_t index = 0>
 	constexpr std::size_t variant_index() {
 		static_assert(std::variant_size_v<VariantType> > index, "Type not found in variant");
@@ -204,6 +229,19 @@ namespace pcf
 		return static_cast<NodeType>(_storage.index());
 	}
 
+	template<class T>
+	void Config::Detail::Node::Set(T value)
+	{
+		static_assert(is_storable_v<T>);
+		_storage = std::move(value);
+	}
+
+	template<>
+	void Config::Detail::Node::Set(std::string_view value)
+	{
+		_storage.emplace<StringType>(value);
+	}
+
 	void Config::Detail::Node::SetObject()
 	{
 		_storage = ObjectType{};
@@ -371,16 +409,6 @@ namespace pcf
 		}
 
 		return { defaultValue };
-	}
-
-	bool Config::Detail::Node::Has(std::string_view key) const
-	{
-		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
-			const auto it = object->find(key);
-			return it != object->end();
-		}
-
-		return false;
 	}
 
 	bool Config::Detail::Node::Empty() const
@@ -795,20 +823,44 @@ namespace pcf
 		return GetType() == NodeType::Array;
 	}
 
-	void Config::Detail::SetObject()
+	template <typename T> requires Config::Detail::Node::is_storable_v<T>
+	void Config::Detail::Set(std::string_view key, T value)
 	{
-		GetCurrent().SetObject();
+		Node* const node = GetByPath(key, false, true);
+		if (node) {
+			node->Set(std::move(value));
+		}
 	}
 
-	void Config::Detail::SetArray()
+	void Config::Detail::SetObject(std::string_view key)
 	{
-		GetCurrent().SetArray();
+		Node* const node = GetByPath(key, false, true);
+		if (node) {
+			node->SetObject();
+		}
+	}
+
+	void Config::Detail::SetArray(std::string_view key)
+	{
+		Node* const node = GetByPath(key, false, true);
+		if (node) {
+			node->SetArray();
+		}
 	}
 
 	template<class T> requires Config::Detail::Node::is_storable_v<T> || std::is_same_v<T, std::string_view>
-	bool Config::Detail::TrySetFrom(T value)
+	bool Config::Detail::TrySetFrom(std::string_view key, T value)
 	{
-		return GetCurrent().TrySetFrom(value);
+		Node* node = GetByPath(key);
+		if (node) {
+			return node->TrySetFrom(value);
+		}
+		node = GetByPath(key, false, true);
+		if (node) {
+			node->Set(value);
+			return true;
+		}
+		return false;
 	}
 
 	void Config::Detail::PushNull()
@@ -862,30 +914,50 @@ namespace pcf
 	}
 
 	template<typename T>
-	T Config::Detail::Get(T defaultValue) const
+	T Config::Detail::Get(std::string_view key, T defaultValue) const
 	{
-		return GetCurrent().Get(defaultValue);
+		Node* const node = GetByPath(key);
+		if (!node) {
+			return defaultValue;
+		}
+
+		return node->Get(defaultValue);
 	}
 
-	plg::string Config::Detail::Get(std::string_view defaultValue) const
+	plg::string Config::Detail::Get(std::string_view key, std::string_view defaultValue) const
 	{
-		return GetCurrent().Get(defaultValue);
+		Node* const node = GetByPath(key);
+		if (!node) {
+			return { defaultValue };
+		}
+
+		return node->Get(defaultValue);
 	}
 
 	template<typename T>
-	T Config::Detail::GetAs(T defaultValue) const
+	T Config::Detail::GetAs(std::string_view key, T defaultValue) const
 	{
-		return GetCurrent().GetAs(defaultValue);
+		Node* const node = GetByPath(key);
+		if (!node) {
+			return defaultValue;
+		}
+
+		return node->GetAs(defaultValue);
 	}
 
-	plg::string Config::Detail::GetAs(std::string_view defaultValue) const
+	plg::string Config::Detail::GetAs(std::string_view key, std::string_view defaultValue) const
 	{
-		return GetCurrent().GetAs(defaultValue);
+		Node* const node = GetByPath(key);
+		if (!node) {
+			return { defaultValue };
+		}
+
+		return node->GetAs(defaultValue);
 	}
 
 	bool Config::Detail::HasKey(std::string_view key) const
 	{
-		return GetCurrent().Has(key);
+		return GetByPath(key) != nullptr;
 	}
 
 	bool Config::Detail::Empty() const
@@ -906,6 +978,25 @@ namespace pcf
 		}
 
 		return parent->GetName(_track.back());
+	}
+
+	plg::string Config::Detail::GetPath() const
+	{
+		auto it = _track.begin();
+		if (it == _track.end()) {
+			return rootName;
+		}
+
+		Node* parent = _root.get();
+		plg::string path = parent->GetName(*it);
+		parent = *it;
+		
+		while (++it != _track.end()) {
+			path.push_back('/');
+			path.append(parent->GetName(*it));
+			parent = *it;
+		}
+		return path;
 	}
 
 	bool Config::Detail::JumpFirst()
@@ -966,15 +1057,10 @@ namespace pcf
 
 	bool Config::Detail::JumpKey(std::string_view key, bool create)
 	{
-		auto& top = GetCurrent();
-		auto* node = top.At(key);
-		if (!node && create) {
-			node = top.Create(key);
+		if (key != thisNode) {
+			return GetByPath(key, true, create) != nullptr;
 		}
-		if (node) {
-			_track.push_back(node);
-			return true;
-		}
+
 		return false;
 	}
 
@@ -1076,6 +1162,78 @@ namespace pcf
 		}
 		return *it;
 	}
+
+	Config::Detail::Node* Config::Detail::GetByPath(std::string_view key) const
+	{
+		if (key.empty()) {
+			return nullptr;
+		}
+
+		Node* node = &GetCurrent();
+		
+		if (key != thisNode) {
+			const std::vector<std::string_view> parts = SplitKey(key);
+			for (const std::string_view& key_part : parts) {
+				Node* const sub = node->At(key_part);
+				if (!sub) {
+					return nullptr;
+				}
+				node = sub;
+			}
+		}
+
+		return node;
+	}
+
+	Config::Detail::Node* Config::Detail::GetByPath(std::string_view key, bool track, bool create)
+	{
+		if (key.empty()) {
+			return nullptr;
+		}
+
+		Node* node = &GetCurrent();
+
+		if (key == thisNode) {
+			return node;
+		}
+
+		const std::vector<std::string_view> parts = SplitKey(key);
+		std::vector<Node*> nodes;
+		
+		auto it = parts.begin();
+		for (; it != parts.end(); ++it) {
+			const std::string_view& key_part = *it;
+			Node* const sub = node->At(key_part);
+			if (!sub) {
+				break;
+			}
+			node = sub;
+			nodes.push_back(node);
+		}
+
+		if (nodes.size() != parts.size()) {
+			if (!create) {
+				return nullptr;
+			}
+			for (; it != parts.end(); ++it) {
+				const std::string_view& key_part = *it;
+				Node* const sub = node->Create(key_part);
+				if (!sub) {
+					return nullptr;
+				}
+				node = sub;
+				nodes.push_back(node);
+			}
+		}
+
+		if (track) {
+			for (Node* sub : nodes) {
+				_track.push_back(sub);
+			}
+		}
+
+		return node;
+	}
 	
 
 	void Config::Merge(const Config& other)
@@ -1128,79 +1286,79 @@ namespace pcf
 		return _detail->IsArray();
 	}
 
-	void Config::SetNull()
+	void Config::SetNull(std::string_view key)
 	{
-		_detail->Set(nullptr);
+		_detail->Set(key, nullptr);
 	}
 
-	void Config::Set(bool value)
+	void Config::Set(std::string_view key, bool value)
 	{
-		_detail->Set(value);
+		_detail->Set(key, value);
 	}
 
-	void Config::Set(int32_t value)
+	void Config::Set(std::string_view key, int32_t value)
 	{
-		_detail->Set(static_cast<int64_t>(value));
+		_detail->Set(key, static_cast<int64_t>(value));
 	}
 
-	void Config::Set(int64_t value)
+	void Config::Set(std::string_view key, int64_t value)
 	{
-		_detail->Set(value);
+		_detail->Set(key, value);
 	}
 
-	void Config::Set(float value)
+	void Config::Set(std::string_view key, float value)
 	{
-		_detail->Set(static_cast<double>(value));
+		_detail->Set(key, static_cast<double>(value));
 	}
 
-	void Config::Set(double value)
+	void Config::Set(std::string_view key, double value)
 	{
-		_detail->Set(value);
+		_detail->Set(key, value);
 	}
 
-	void Config::Set(plg::string value)
+	void Config::Set(std::string_view key, plg::string value)
 	{
-		_detail->Set(std::move(value));
+		_detail->Set(key, std::move(value));
 	}
 
-	void Config::SetObject()
+	void Config::SetObject(std::string_view key)
 	{
-		_detail->SetObject();
+		_detail->SetObject(key);
 	}
 
-	void Config::SetArray()
+	void Config::SetArray(std::string_view key)
 	{
-		_detail->SetArray();
+		_detail->SetArray(key);
 	}
 
-	bool Config::TrySetFromBool(bool value)
+	bool Config::TrySetFromBool(std::string_view key, bool value)
 	{
-		return _detail->TrySetFrom(value);
+		return _detail->TrySetFrom(key, value);
 	}
 
-	bool Config::TrySetFromInt32(int32_t value)
+	bool Config::TrySetFromInt32(std::string_view key, int32_t value)
 	{
-		return _detail->TrySetFrom(static_cast<int64_t>(value));
+		return _detail->TrySetFrom(key, static_cast<int64_t>(value));
 	}
 
-	bool Config::TrySetFromInt64(int64_t value)
+	bool Config::TrySetFromInt64(std::string_view key, int64_t value)
 	{
-		return _detail->TrySetFrom(value);
+		return _detail->TrySetFrom(key, value);
 	}
 
-	bool Config::TrySetFromFloat(float value)
+	bool Config::TrySetFromFloat(std::string_view key, float value)
 	{
-		return _detail->TrySetFrom(static_cast<double>(value));
+		return _detail->TrySetFrom(key, static_cast<double>(value));
 	}
 
-	bool Config::TrySetFromDouble(double value)
+	bool Config::TrySetFromDouble(std::string_view key, double value)
 	{
-		return _detail->TrySetFrom(value);
+		return _detail->TrySetFrom(key, value);
 	}
 
-	bool Config::TrySetFromString(std::string_view value)
+	bool Config::TrySetFromString(std::string_view key, std::string_view value)
 	{
-		return _detail->TrySetFrom(value);
+		return _detail->TrySetFrom(key, value);
 	}
 
 	void Config::PushNull()
@@ -1248,64 +1406,64 @@ namespace pcf
 		_detail->PushArray();
 	}
 
-	bool Config::GetBool(bool defaultValue) const
+	bool Config::GetBool(std::string_view key, bool defaultValue) const
 	{
-		return _detail->Get(defaultValue);
+		return _detail->Get(key, defaultValue);
 	}
 
-	int32_t Config::GetInt32(int32_t defaultValue) const
+	int32_t Config::GetInt32(std::string_view key, int32_t defaultValue) const
 	{
-		return static_cast<int32_t>(_detail->Get(static_cast<int64_t>(defaultValue)));
+		return static_cast<int32_t>(_detail->Get(key, static_cast<int64_t>(defaultValue)));
 	}
 
-	int64_t Config::GetInt64(int64_t defaultValue) const
+	int64_t Config::GetInt64(std::string_view key, int64_t defaultValue) const
 	{
-		return _detail->Get(defaultValue);
+		return _detail->Get(key, defaultValue);
 	}
 
-	float Config::GetFloat(float defaultValue) const
+	float Config::GetFloat(std::string_view key, float defaultValue) const
 	{
-		return static_cast<float>(_detail->Get(static_cast<double>(defaultValue)));
+		return static_cast<float>(_detail->Get(key, static_cast<double>(defaultValue)));
 	}
 
-	double Config::GetDouble(double defaultValue) const
+	double Config::GetDouble(std::string_view key, double defaultValue) const
 	{
-		return _detail->Get(defaultValue);
+		return _detail->Get(key, defaultValue);
 	}
 
-	plg::string Config::GetString(std::string_view defaultValue) const
+	plg::string Config::GetString(std::string_view key, std::string_view defaultValue) const
 	{
-		return _detail->Get(defaultValue);
+		return _detail->Get(key, defaultValue);
 	}
 
-	bool Config::GetAsBool(bool defaultValue) const
+	bool Config::GetAsBool(std::string_view key, bool defaultValue) const
 	{
-		return _detail->GetAs<bool>(defaultValue);
+		return _detail->GetAs<bool>(key, defaultValue);
 	}
 
-	int32_t Config::GetAsInt32(int32_t defaultValue) const
+	int32_t Config::GetAsInt32(std::string_view key, int32_t defaultValue) const
 	{
-		return static_cast<int32_t>(_detail->GetAs<int64_t>(int64_t{ defaultValue }));
+		return static_cast<int32_t>(_detail->GetAs<int64_t>(key, int64_t{ defaultValue }));
 	}
 
-	int64_t Config::GetAsInt64(int64_t defaultValue) const
+	int64_t Config::GetAsInt64(std::string_view key, int64_t defaultValue) const
 	{
-		return _detail->GetAs<int64_t>(defaultValue);
+		return _detail->GetAs<int64_t>(key, defaultValue);
 	}
 
-	float Config::GetAsFloat(float defaultValue) const
+	float Config::GetAsFloat(std::string_view key, float defaultValue) const
 	{
-		return static_cast<float>(_detail->GetAs<double>(double{ defaultValue }));
+		return static_cast<float>(_detail->GetAs<double>(key, double{ defaultValue }));
 	}
 
-	double Config::GetAsDouble(double defaultValue) const
+	double Config::GetAsDouble(std::string_view key, double defaultValue) const
 	{
-		return _detail->GetAs<double>(defaultValue);
+		return _detail->GetAs<double>(key, defaultValue);
 	}
 
-	plg::string Config::GetAsString(std::string_view defaultValue) const
+	plg::string Config::GetAsString(std::string_view key, std::string_view defaultValue) const
 	{
-		return _detail->GetAs(defaultValue);
+		return _detail->GetAs(key, defaultValue);
 	}
 
 	bool Config::HasKey(std::string_view key) const
@@ -1326,6 +1484,11 @@ namespace pcf
 	plg::string Config::GetName() const
 	{
 		return _detail->GetName();
+	}
+
+	plg::string Config::GetPath() const
+	{
+		return _detail->GetPath();
 	}
 
 	bool Config::JumpFirst()

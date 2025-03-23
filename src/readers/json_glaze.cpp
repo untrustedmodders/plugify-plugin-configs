@@ -9,19 +9,19 @@ namespace pcf
 	static void MapJson(glz::json_t& json, Config& config)
 	{
 		if (json.is_null()) {
-			config.Set(nullptr);
+			config.Set(thisNode, nullptr);
 		}
 		else if (json.is_boolean()) {
-			config.Set(json.get_boolean());
+			config.Set(thisNode, json.get_boolean());
 		}
 		else if (json.is_number()) {
-			config.Set(json.get_number());
+			config.Set(thisNode, json.get_number());
 		}
 		else if (json.is_string()) {
-			config.Set(json.get_string());
+			config.Set(thisNode, json.get_string());
 		}
 		else if (json.is_object()) {
-			config.Set(cfobject);
+			config.Set(thisNode, cfobject);
 			auto& obj = json.get_object();
 			for (auto& field : obj) {
 				config.JumpKey(std::get<0>(field), true);
@@ -30,7 +30,7 @@ namespace pcf
 			}
 		}
 		else if (json.is_array()) {
-			config.Set(cfarray);
+			config.Set(thisNode, cfarray);
 			auto& arr = json.get_array();
 			for (auto& item : arr) {
 				config.PushNull();
@@ -40,7 +40,7 @@ namespace pcf
 			}
 		}
 		else {
-			config.Set(nullptr);
+			config.Set(thisNode, nullptr);
 		}
 	}
 
