@@ -10,7 +10,7 @@ namespace pcf
 			return;
 		}
 
-		_readers[ext] = func;
+		_readers.emplace(ext, func);
 	}
 
 	std::unique_ptr<Config> ReaderFactory::ReadConfig(std::string_view path)
