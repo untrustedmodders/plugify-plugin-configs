@@ -3,6 +3,7 @@
 #include <plugify-configs/plugify-configs.hpp>
 #include <plugify/vector.hpp>
 #include <plugify/string.hpp>
+#include <plugify/variant.hpp>
 #include <map>
 #include <deque>
 #include <variant>
@@ -24,7 +25,7 @@ namespace pcf
 			using StringType = plg::string;
 			using ObjectType = std::multimap<plg::string, Ptr>;
 			using ArrayType = plg::vector<Ptr>;
-			using StorageType = std::variant<NullType, BoolType, NumberType, FloatType, StringType, ObjectType, ArrayType>;
+			using StorageType = plg::variant<NullType, BoolType, NumberType, FloatType, StringType, ObjectType, ArrayType>;
 			template<class T>
 			static constexpr bool is_storable_v = std::is_same_v<T, NullType> || std::is_same_v<T, BoolType> || std::is_same_v<T, NumberType> 
 				|| std::is_same_v<T, FloatType> || std::is_same_v<T, StringType> || std::is_same_v<T, ObjectType> || std::is_same_v<T, ArrayType>;
@@ -86,7 +87,7 @@ namespace pcf
 
 		private:
 			StorageType _storage = ObjectType{};
-			ObjectType::iterator _objCache = std::get<ObjectType>(_storage).end();
+			ObjectType::iterator _objCache = plg::get<ObjectType>(_storage).end();
 			ArrayType::iterator _arrCache = {};
 		};
 

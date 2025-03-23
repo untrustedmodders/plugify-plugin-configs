@@ -31,11 +31,11 @@ namespace pcf
 
 	template<typename VariantType, typename T, std::size_t index = 0>
 	constexpr std::size_t variant_index() {
-		static_assert(std::variant_size_v<VariantType> > index, "Type not found in variant");
-		if constexpr (index == std::variant_size_v<VariantType>) {
+		static_assert(plg::variant_size_v<VariantType> > index, "Type not found in variant");
+		if constexpr (index == plg::variant_size_v<VariantType>) {
 			return index;
 		}
-		else if constexpr (std::is_same_v<std::variant_alternative_t<index, VariantType>, T>) {
+		else if constexpr (std::is_same_v<plg::variant_alternative_t<index, VariantType>, T>) {
 			return index;
 		}
 		else {
@@ -111,32 +111,32 @@ namespace pcf
 		requires std::is_same_v<Config::Detail::Node::Ptr, std::remove_cvref_t<SoruceType>>
 	void Config::Detail::Node::MergeNodes(Config::Detail::Node::Ptr& destanation, SoruceType&& source)
 	{
-		if (std::get_if<NullType>(&source->_storage)) {
+		if (plg::get_if<NullType>(&source->_storage)) {
 			destanation->_storage = nullptr;
 		}
-		else if (auto* const boolSource = std::get_if<BoolType>(&source->_storage)) {
+		else if (auto* const boolSource = plg::get_if<BoolType>(&source->_storage)) {
 			destanation->_storage = *boolSource;
 		}
-		else if (auto* const numberSource = std::get_if<NumberType>(&source->_storage)) {
+		else if (auto* const numberSource = plg::get_if<NumberType>(&source->_storage)) {
 			destanation->_storage = *numberSource;
 		}
-		else if (auto* const floatSource = std::get_if<FloatType>(&source->_storage)) {
+		else if (auto* const floatSource = plg::get_if<FloatType>(&source->_storage)) {
 			destanation->_storage = *floatSource;
 		}
-		else if (auto* const stringSource = std::get_if<StringType>(&source->_storage)) {
+		else if (auto* const stringSource = plg::get_if<StringType>(&source->_storage)) {
 			destanation->_storage = *stringSource;
 		}
-		else if (auto* const objectSource = std::get_if<ObjectType>(&source->_storage)) {
+		else if (auto* const objectSource = plg::get_if<ObjectType>(&source->_storage)) {
 			MergeObject(destanation, std::forward<SoruceType>(source), *objectSource);
 		}
-		else if (auto* const arrSource = std::get_if<ArrayType>(&source->_storage)) {
+		else if (auto* const arrSource = plg::get_if<ArrayType>(&source->_storage)) {
 			MergeArray(destanation, std::forward<SoruceType>(source), *arrSource);
 		}
 	}
 
 	void Config::Detail::Node::MergeObject(Node::Ptr& destanation, [[maybe_unused]] const Node::Ptr& source, const ObjectType& objectSource)
 	{
-		auto* objectDest = std::get_if<ObjectType>(&destanation->_storage);
+		auto* objectDest = plg::get_if<ObjectType>(&destanation->_storage);
 		if (!objectDest) {
 			objectDest = &destanation->_storage.emplace<ObjectType>();
 		}
@@ -151,7 +151,7 @@ namespace pcf
 
 	void Config::Detail::Node::MergeObject(Node::Ptr& destanation, Node::Ptr&& source, ObjectType& objectSource)
 	{
-		if (auto* objectDest = std::get_if<ObjectType>(&destanation->_storage)) {
+		if (auto* objectDest = plg::get_if<ObjectType>(&destanation->_storage)) {
 			for (auto& [name, ptr] : objectSource) {
 				if (auto destit = objectDest->find(name); destit != objectDest->end()) {
 					destit->second = std::move(ptr);
@@ -168,7 +168,7 @@ namespace pcf
 
 	void Config::Detail::Node::MergeArray(Node::Ptr& destanation, [[maybe_unused]] const Node::Ptr& source, const ArrayType& arrSource)
 	{
-		auto* arrDest = std::get_if<ArrayType>(&destanation->_storage);
+		auto* arrDest = plg::get_if<ArrayType>(&destanation->_storage);
 		if (!arrDest) {
 			arrDest = &destanation->_storage.emplace<ArrayType>();
 		}
@@ -183,7 +183,7 @@ namespace pcf
 
 	void Config::Detail::Node::MergeArray(Node::Ptr& destanation, Node::Ptr&& source, ArrayType& arrSource)
 	{
-		if (auto* arrDest = std::get_if<ArrayType>(&destanation->_storage)) {
+		if (auto* arrDest = plg::get_if<ArrayType>(&destanation->_storage)) {
 			auto srcit = arrSource.begin();
 			auto destit = arrDest->end();
 			for (; srcit != arrSource.end(); ++srcit) {
@@ -223,7 +223,7 @@ namespace pcf
 		static_assert(static_cast<size_t>(NodeType::Object) == 5 && variant_index<StorageType, ObjectType>() == 5);
 		static_assert(static_cast<size_t>(NodeType::Array) == 6 && variant_index<StorageType, ArrayType>() == 6);
 
-		if (_storage.index() == std::variant_npos) {
+		if (_storage.index() == plg::variant_npos) {
 			return NodeType::Null;
 		}
 		return static_cast<NodeType>(_storage.index());
@@ -245,13 +245,13 @@ namespace pcf
 	void Config::Detail::Node::SetObject()
 	{
 		_storage = ObjectType{};
-		_objCache = std::get<ObjectType>(_storage).end();
+		_objCache = plg::get<ObjectType>(_storage).end();
 	}
 
 	void Config::Detail::Node::SetArray()
 	{
 		_storage = ArrayType{};
-		_arrCache = std::get<ArrayType>(_storage).end();
+		_arrCache = plg::get<ArrayType>(_storage).end();
 	}
 
 	template<class T>
@@ -315,7 +315,7 @@ namespace pcf
 
 	Config::Detail::Node* Config::Detail::Node::PushBack()
 	{
-		if (auto* const arr = std::get_if<ArrayType>(&_storage)) {
+		if (auto* const arr = plg::get_if<ArrayType>(&_storage)) {
 			_arrCache = arr->end();
 			return arr->emplace_back(NewNode()).get();
 		}
@@ -325,7 +325,7 @@ namespace pcf
 
 	Config::Detail::Node* Config::Detail::Node::PushBackNull()
 	{
-		if (auto* const arr = std::get_if<ArrayType>(&_storage)) {
+		if (auto* const arr = plg::get_if<ArrayType>(&_storage)) {
 			_arrCache = arr->end();
 			return arr->emplace_back(NewNullNode()).get();
 		}
@@ -336,7 +336,7 @@ namespace pcf
 	bool Config::Detail::Node::Get(bool defaultValue) const
 	{
 		static_assert(std::is_same_v<BoolType, bool>);
-		if (const bool* const value = std::get_if<bool>(&_storage)) {
+		if (const bool* const value = plg::get_if<bool>(&_storage)) {
 			return *value;
 		}
 		return defaultValue;
@@ -345,7 +345,7 @@ namespace pcf
 	int64_t Config::Detail::Node::Get(int64_t defaultValue) const
 	{
 		static_assert(std::is_same_v<NumberType, int64_t>);
-		if (const int64_t* const value = std::get_if<NumberType>(&_storage)) {
+		if (const int64_t* const value = plg::get_if<NumberType>(&_storage)) {
 			return *value;
 		}
 		return defaultValue;
@@ -354,7 +354,7 @@ namespace pcf
 	double Config::Detail::Node::Get(double defaultValue) const
 	{
 		static_assert(std::is_same_v<FloatType, double>);
-		if (const double* const value = std::get_if<double>(&_storage)) {
+		if (const double* const value = plg::get_if<double>(&_storage)) {
 			return *value;
 		}
 		return defaultValue;
@@ -363,7 +363,7 @@ namespace pcf
 	plg::string Config::Detail::Node::Get(std::string_view defaultValue) const
 	{
 		static_assert(std::is_same_v<StringType, plg::string>);
-		if (const plg::string* const value = std::get_if<plg::string>(&_storage)) {
+		if (const plg::string* const value = plg::get_if<plg::string>(&_storage)) {
 			return *value;
 		}
 		return { defaultValue };
@@ -380,13 +380,13 @@ namespace pcf
 		);
 		switch (_storage.index()) {
 		case variant_index<StorageType, BoolType>():
-			return static_cast<T>(std::get<BoolType>(_storage));
+			return static_cast<T>(plg::get<BoolType>(_storage));
 		case variant_index<StorageType, NumberType>():
-			return static_cast<T>(std::get<NumberType>(_storage));
+			return static_cast<T>(plg::get<NumberType>(_storage));
 		case variant_index<StorageType, FloatType>():
-			return static_cast<T>(std::get<FloatType>(_storage));
+			return static_cast<T>(plg::get<FloatType>(_storage));
 		case variant_index<StorageType, StringType>():
-			if (auto result = ValueFromChars<T>({ std::get<StringType>(_storage) })) {
+			if (auto result = ValueFromChars<T>({ plg::get<StringType>(_storage) })) {
 				return *result;
 			}
 			break;
@@ -399,13 +399,13 @@ namespace pcf
 	{
 		switch (_storage.index()) {
 		case variant_index<StorageType, BoolType>():
-			return plg::to_string(std::get<BoolType>(_storage));
+			return plg::to_string(plg::get<BoolType>(_storage));
 		case variant_index<StorageType, NumberType>():
-			return plg::to_string(std::get<NumberType>(_storage));
+			return plg::to_string(plg::get<NumberType>(_storage));
 		case variant_index<StorageType, FloatType>():
-			return plg::to_string(std::get<FloatType>(_storage));
+			return plg::to_string(plg::get<FloatType>(_storage));
 		case variant_index<StorageType, StringType>():
-			return std::get<StringType>(_storage);
+			return plg::get<StringType>(_storage);
 		}
 
 		return { defaultValue };
@@ -413,16 +413,16 @@ namespace pcf
 
 	bool Config::Detail::Node::Empty() const
 	{
-		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
+		if (auto* const object = plg::get_if<ObjectType>(&_storage)) {
 			return object->empty();
 		}
-		if (auto* const arr = std::get_if<ArrayType>(&_storage)) {
+		if (auto* const arr = plg::get_if<ArrayType>(&_storage)) {
 			return arr->empty();
 		}
-		if (auto* const str = std::get_if<StringType>(&_storage)) {
+		if (auto* const str = plg::get_if<StringType>(&_storage)) {
 			return str->empty();
 		}
-		if (auto* const ptr = std::get_if<NullType>(&_storage)) {
+		if (auto* const ptr = plg::get_if<NullType>(&_storage)) {
 			return true;
 		}
 
@@ -431,13 +431,13 @@ namespace pcf
 
 	int64_t Config::Detail::Node::GetSize() const
 	{
-		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
+		if (auto* const object = plg::get_if<ObjectType>(&_storage)) {
 			return static_cast<int64_t>(object->size());
 		}
-		if (auto* const arr = std::get_if<ArrayType>(&_storage)) {
+		if (auto* const arr = plg::get_if<ArrayType>(&_storage)) {
 			return static_cast<int64_t>(arr->size());
 		}
-		if (auto* const str = std::get_if<StringType>(&_storage)) {
+		if (auto* const str = plg::get_if<StringType>(&_storage)) {
 			return static_cast<int64_t>(str->size());
 		}
 
@@ -446,7 +446,7 @@ namespace pcf
 
 	plg::string Config::Detail::Node::GetName(Node* node) const
 	{
-		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
+		if (auto* const object = plg::get_if<ObjectType>(&_storage)) {
 			ObjectType::const_iterator nodeit = object->cend();
 			if (_objCache != object->cend() && _objCache->second.get() == node) {
 				nodeit = _objCache;
@@ -470,7 +470,7 @@ namespace pcf
 
 	Config::Detail::Node* Config::Detail::Node::At(std::string_view key)
 	{
-		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
+		if (auto* const object = plg::get_if<ObjectType>(&_storage)) {
 			if (const auto it = object->find(key); it != object->end()) {
 				_objCache = it;
 				return it->second.get();
@@ -482,7 +482,7 @@ namespace pcf
 
 	Config::Detail::Node* Config::Detail::Node::At(int n)
 	{
-		if (auto* const arr = std::get_if<ArrayType>(&_storage)) {
+		if (auto* const arr = plg::get_if<ArrayType>(&_storage)) {
 			if (n >= 0) {
 				if (n < arr->size()) {
 					const auto it = arr->begin() + n;
@@ -505,13 +505,13 @@ namespace pcf
 
 	Config::Detail::Node* Config::Detail::Node::First()
 	{
-		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
+		if (auto* const object = plg::get_if<ObjectType>(&_storage)) {
 			if (const auto it = object->begin(); it != object->end()) {
 				_objCache = it;
 				return it->second.get();
 			}
 		}
-		else if (auto* const arr = std::get_if<ArrayType>(&_storage)) {
+		else if (auto* const arr = plg::get_if<ArrayType>(&_storage)) {
 			if (const auto it = arr->begin(); it != arr->end()) {
 				_arrCache = it;
 				return it->get();
@@ -523,13 +523,13 @@ namespace pcf
 
 	Config::Detail::Node* Config::Detail::Node::Last()
 	{
-		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
+		if (auto* const object = plg::get_if<ObjectType>(&_storage)) {
 			if (const auto it = object->rbegin(); it != object->rend()) {
 				_objCache = it.base();
 				return it->second.get();
 			}
 		}
-		else if (auto* const arr = std::get_if<ArrayType>(&_storage)) {
+		else if (auto* const arr = plg::get_if<ArrayType>(&_storage)) {
 			if (const auto it = arr->rbegin(); it != arr->rend()) {
 				_arrCache = it.base();
 				return it->get();
@@ -541,7 +541,7 @@ namespace pcf
 
 	Config::Detail::Node* Config::Detail::Node::Next(Node* node)
 	{
-		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
+		if (auto* const object = plg::get_if<ObjectType>(&_storage)) {
 			if (_objCache != object->end() && _objCache->second.get() == node) {
 				ObjectType::iterator nextit = _objCache;
 				if (++nextit == object->end()) {
@@ -566,7 +566,7 @@ namespace pcf
 			return nullptr;
 		}
 
-		if (auto* const arr = std::get_if<ArrayType>(&_storage)) {
+		if (auto* const arr = plg::get_if<ArrayType>(&_storage)) {
 			if (_arrCache != arr->end() && _arrCache->get() == node) {
 				ArrayType::iterator nextit = _arrCache;
 				if (++nextit == arr->end()) {
@@ -596,7 +596,7 @@ namespace pcf
 	
 	Config::Detail::Node* Config::Detail::Node::Prev(Node* node)
 	{
-		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
+		if (auto* const object = plg::get_if<ObjectType>(&_storage)) {
 			if (_objCache != object->end() && _objCache->second.get() == node) {
 				auto nextit = std::reverse_iterator<ObjectType::iterator>(_objCache);
 				if (++nextit == object->rend()) {
@@ -621,7 +621,7 @@ namespace pcf
 			return nullptr;
 		}
 
-		if (auto* const arr = std::get_if<ArrayType>(&_storage)) {
+		if (auto* const arr = plg::get_if<ArrayType>(&_storage)) {
 			if (_arrCache != arr->end() && _arrCache->get() == node) {
 				auto nextit = std::reverse_iterator<ArrayType::iterator>(_arrCache);
 				if (++nextit == arr->rend()) {
@@ -651,7 +651,7 @@ namespace pcf
 
 	Config::Detail::Node* Config::Detail::Node::Create(std::string_view key)
 	{
-		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
+		if (auto* const object = plg::get_if<ObjectType>(&_storage)) {
 			const auto it = object->emplace(key, NewNode());
 			return it->second.get();
 		}
@@ -664,7 +664,7 @@ namespace pcf
 		std::pair<Ptr, Node*> result{};
 		auto& [extractedNode, nextNode] = result;
 
-		if (auto* const object = std::get_if<ObjectType>(&_storage)) {
+		if (auto* const object = plg::get_if<ObjectType>(&_storage)) {
 			ObjectType::iterator nodeit = object->end();
 			if (_objCache != object->end() && _objCache->second.get() == node) {
 				nodeit = _objCache;
@@ -689,7 +689,7 @@ namespace pcf
 				object->erase(nodeit);
 			}
 		}
-		else if (auto* const arr = std::get_if<ArrayType>(&_storage)) {
+		else if (auto* const arr = plg::get_if<ArrayType>(&_storage)) {
 			ArrayType::iterator nodeit = arr->end();
 
 			if (_arrCache != arr->end() && _arrCache->get() == node) {
@@ -723,22 +723,22 @@ namespace pcf
 
 		plg::string json;
 
-		if (std::get_if<NullType>(&_storage)) {
+		if (plg::get_if<NullType>(&_storage)) {
 			json = "null"s;
 		}
-		else if (const bool* const boolValue = std::get_if<BoolType>(&_storage)) {
+		else if (const bool* const boolValue = plg::get_if<BoolType>(&_storage)) {
 			json = *boolValue ? "true"s : "false"s;
 		}
-		else if (const int64_t* const numberValue = std::get_if<NumberType>(&_storage)) {
+		else if (const int64_t* const numberValue = plg::get_if<NumberType>(&_storage)) {
 			json = plg::to_string(*numberValue);
 		}
-		else if (const double* const floatValue = std::get_if<FloatType>(&_storage)) {
+		else if (const double* const floatValue = plg::get_if<FloatType>(&_storage)) {
 			json = plg::to_string(*floatValue);
 		}
-		else if (const plg::string* const stringValue = std::get_if<StringType>(&_storage)) {
+		else if (const plg::string* const stringValue = plg::get_if<StringType>(&_storage)) {
 			std::format_to(std::back_inserter(json), "\"{}\"", *stringValue);
 		}
-		else if (const ObjectType* const objValue = std::get_if<ObjectType>(&_storage)) {
+		else if (const ObjectType* const objValue = plg::get_if<ObjectType>(&_storage)) {
 			json.push_back('{');
 			if (!objValue->empty()) {
 				for (const auto& [name, node] : *objValue) {
@@ -748,7 +748,7 @@ namespace pcf
 			}
 			json.push_back('}');
 		}
-		else if (const ArrayType* const arrValue = std::get_if<ArrayType>(&_storage)) {
+		else if (const ArrayType* const arrValue = plg::get_if<ArrayType>(&_storage)) {
 			json.push_back('[');
 			if (!arrValue->empty()) {
 				for (const auto& item : *arrValue) {
