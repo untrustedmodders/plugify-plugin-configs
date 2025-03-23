@@ -55,7 +55,7 @@ namespace pcf
 			return nullptr;
 		}
 
-		for (std::string_view path : paths) {
+		for (const std::string_view& path : paths) {
 			namespace fs = std::filesystem;
 			if (fs::exists(path)) {
 				auto overrideConfig = _factory->ReadConfig(path);
