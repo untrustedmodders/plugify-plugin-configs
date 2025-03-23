@@ -1,6 +1,5 @@
 #include "config.hpp"
-#include <format>
-#include <string>
+#include <string_view>
 
 namespace pcf
 {
@@ -484,7 +483,7 @@ namespace pcf
 	{
 		if (auto* const arr = plg::get_if<ArrayType>(&_storage)) {
 			if (n >= 0) {
-				if (n < arr->size()) {
+				if (static_cast<size_t>(n) < arr->size()) {
 					const auto it = arr->begin() + n;
 					_arrCache = it;
 					return it->get();

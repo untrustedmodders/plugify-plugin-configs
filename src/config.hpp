@@ -1,6 +1,7 @@
 #pragma once
 #include <plugify-configs/methods.hpp>
 #include <plugify-configs/plugify-configs.hpp>
+#include <plugify/compat_format.hpp>
 #include <plugify/vector.hpp>
 #include <plugify/string.hpp>
 #include <plugify/variant.hpp>
