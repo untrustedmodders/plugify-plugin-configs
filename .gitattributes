@@ -1,2 +1,2 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+examples/** linuguist-vendored
+*.pplugin.in text eol=lf linguist-language=JSON
