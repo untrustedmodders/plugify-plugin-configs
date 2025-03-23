@@ -28,7 +28,7 @@ namespace pcf
 
 		auto config = _factory->ReadConfig(path);
 
-		if (!config && _error.length() == 0) {
+		if (!config && _error.empty()) {
 			// TODO: Log error: No error is setted while config parse failure
 		}
 
@@ -60,7 +60,7 @@ namespace pcf
 			if (fs::exists(path)) {
 				auto overrideConfig = _factory->ReadConfig(path);
 				if (!overrideConfig) {
-					if (_error.length() == 0) {
+					if (_error.empty()) {
 						// TODO: Log error: No error is setted while config parse failure
 					}
 					return nullptr;
