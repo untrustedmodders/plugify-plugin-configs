@@ -10,6 +10,11 @@ namespace pcf
 			return;
 		}
 
+        if (_readers.contains(ext)) {
+            SetError(std::format("Reader for {} already registered", ext));
+            return;
+        }
+
 		_readers.emplace(ext, func);
 	}
 
