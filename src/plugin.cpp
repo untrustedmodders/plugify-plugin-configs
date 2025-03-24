@@ -1,25 +1,21 @@
-#include "readers/json_glaze.hpp"
 #include "plugin.hpp"
 #include "readerfactory.hpp"
+#include "readers/json_glaze.hpp"
 #include <plugify-configs/plugify-configs.hpp>
 #include <plugify_configs_export.h>
 
-namespace pcf
-{
-	void ConfigsPlugin::OnPluginStart()
-	{
+namespace pcf {
+	void ConfigsPlugin::OnPluginStart() {
 		_factory = std::make_unique<ReaderFactory>();
 		_factory->RegisterReader("json", &ReadJsonConfig);
 		_factory->RegisterReader("jsonc", &ReadJsoncConfig);
 	}
 
-	void ConfigsPlugin::OnPluginEnd()
-	{
+	void ConfigsPlugin::OnPluginEnd() {
 		_factory.reset();
 	}
 
-	std::unique_ptr<Config> ConfigsPlugin::ReadConfig(std::string_view path)
-	{
+	std::unique_ptr<Config> ConfigsPlugin::ReadConfig(std::string_view path) {
 		_error.clear();
 
 		if (!_factory) {
@@ -36,8 +32,7 @@ namespace pcf
 		return config;
 	}
 
-	std::unique_ptr<Config> ConfigsPlugin::ReadConfigs(const plg::vector<std::string_view>& paths)
-	{
+	std::unique_ptr<Config> ConfigsPlugin::ReadConfigs(std::span<const std::string_view> paths) {
 		_error.clear();
 
 		if (!_factory) {
@@ -56,7 +51,7 @@ namespace pcf
 			return nullptr;
 		}
 
-		for (const std::string_view& path : paths) {
+		for (const std::string_view& path: paths) {
 			namespace fs = std::filesystem;
 			if (fs::exists(path)) {
 				auto overrideConfig = _factory->ReadConfig(path);
@@ -73,17 +68,15 @@ namespace pcf
 		return config;
 	}
 
-	void ConfigsPlugin::SetError(std::string_view error)
-	{
+	void ConfigsPlugin::SetError(std::string_view error) {
 		_error = error;
 	}
 
-	plg::string ConfigsPlugin::GetError()
-	{
+	std::string_view ConfigsPlugin::GetError() {
 		return _error;
 	}
 
 	ConfigsPlugin plugin;
-}
+}// namespace pcf
 
 EXPOSE_PLUGIN(PLUGIFY_CONFIGS_API, pcf::ConfigsPlugin, &pcf::plugin)

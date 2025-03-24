@@ -1,22 +1,19 @@
 #pragma once
+#include <deque>
+#include <map>
+#include <memory>
 #include <plugify-configs/methods.hpp>
 #include <plugify-configs/plugify-configs.hpp>
 #include <plugify/compat_format.hpp>
-#include <plugify/vector.hpp>
 #include <plugify/string.hpp>
 #include <plugify/variant.hpp>
-#include <map>
-#include <deque>
+#include <plugify/vector.hpp>
 #include <variant>
-#include <memory>
 
-namespace pcf
-{
-	class Config::Detail
-	{
+namespace pcf {
+	class Config::Detail {
 	private:
-		class Node
-		{
+		class Node {
 		public:
 			using Ptr = std::unique_ptr<Node>;
 			using NullType = std::nullptr_t;
@@ -28,8 +25,7 @@ namespace pcf
 			using ArrayType = plg::vector<Ptr>;
 			using StorageType = plg::variant<NullType, BoolType, NumberType, FloatType, StringType, ObjectType, ArrayType>;
 			template<class T>
-			static constexpr bool is_storable_v = std::is_same_v<T, NullType> || std::is_same_v<T, BoolType> || std::is_same_v<T, NumberType> 
-				|| std::is_same_v<T, FloatType> || std::is_same_v<T, StringType> || std::is_same_v<T, ObjectType> || std::is_same_v<T, ArrayType>;
+			static constexpr bool is_storable_v = std::is_same_v<T, NullType> || std::is_same_v<T, BoolType> || std::is_same_v<T, NumberType> || std::is_same_v<T, FloatType> || std::is_same_v<T, StringType> || std::is_same_v<T, ObjectType> || std::is_same_v<T, ArrayType>;
 
 		public:
 			static Node::Ptr NewNode();
@@ -106,12 +102,14 @@ namespace pcf
 		bool IsObject() const;
 		bool IsArray() const;
 
-		template<typename T> requires Config::Detail::Node::is_storable_v<T>
+		template<typename T>
+			requires Config::Detail::Node::is_storable_v<T>
 		void Set(std::string_view key, T value);
 		void SetObject(std::string_view key);
 		void SetArray(std::string_view key);
 
-		template<class T> requires Config::Detail::Node::is_storable_v<T> || std::is_same_v<T, std::string_view>
+		template<class T>
+			requires Config::Detail::Node::is_storable_v<T> || std::is_same_v<T, std::string_view>
 		bool TrySetFrom(std::string_view key, T value);
 
 		void PushNull();
@@ -164,4 +162,4 @@ namespace pcf
 		Node::Ptr _root = Node::NewNode();
 		std::deque<Node*> _track;
 	};
-}
+}// namespace pcf

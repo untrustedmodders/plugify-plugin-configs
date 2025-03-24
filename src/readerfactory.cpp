@@ -1,25 +1,22 @@
 #include "readerfactory.hpp"
-#include <plugify-configs/plugify-configs.hpp>
 #include <filesystem>
+#include <plugify-configs/plugify-configs.hpp>
 
-namespace pcf
-{
-	void ReaderFactory::RegisterReader(std::string_view ext, ReaderFactory::ReaderLoad func)
-	{
+namespace pcf {
+	void ReaderFactory::RegisterReader(std::string_view ext, ReaderFactory::ReaderLoad func) {
 		if (func == nullptr) {
 			return;
 		}
 
-        if (_readers.contains(ext)) {
-            SetError(std::format("Reader for {} already registered", ext));
-            return;
-        }
+		if (_readers.contains(ext)) {
+			SetError(std::format("Reader for {} already registered", ext));
+			return;
+		}
 
 		_readers.emplace(ext, func);
 	}
 
-	std::unique_ptr<Config> ReaderFactory::ReadConfig(std::string_view path)
-	{
+	std::unique_ptr<Config> ReaderFactory::ReadConfig(std::string_view path) {
 		namespace fs = std::filesystem;
 		const auto config_path = fs::path(path);
 		const auto ext = config_path.extension().string();
@@ -34,4 +31,4 @@ namespace pcf
 		}
 		return (reader->second)(path);
 	}
-}
+}// namespace pcf
