@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.3](https://github.com/untrustedmodders/plugify-configs/compare/v1.0.2...v1.0.3) (2025-03-24)
+
+
+### Bug Fixes
+
+* add missing include ([cecc32c](https://github.com/untrustedmodders/plugify-configs/commit/cecc32cf7f70dbd53998c55784339c86c5a71e18))
+* refactor with clang ([4c3c168](https://github.com/untrustedmodders/plugify-configs/commit/4c3c168e84b7625a847628c6ab4928c7809079ec))
+
 ## [1.0.2](https://github.com/untrustedmodders/plugify-configs/compare/v1.0.1...v1.0.2) (2025-03-24)
 
 
