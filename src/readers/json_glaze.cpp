@@ -56,4 +56,17 @@ namespace pcf
 		MapJson(json, *config);
 		return config;
 	}
+
+	std::unique_ptr<Config> ReadJsoncConfig(std::string_view path)
+	{
+		glz::json_t json{};
+		auto ec = glz::read_file_jsonc(json, path, std::string{});
+		if (ec) {
+			SetError(glz::format_error(ec));
+			return nullptr;
+		}
+		auto config = MakeConfig();
+		MapJson(json, *config);
+		return config;
+	}
 }

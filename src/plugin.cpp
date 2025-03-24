@@ -10,6 +10,7 @@ namespace pcf
 	{
 		_factory = std::make_unique<ReaderFactory>();
 		_factory->RegisterReader("json", &ReadJsonConfig);
+		_factory->RegisterReader("jsonc", &ReadJsoncConfig);
 	}
 
 	void ConfigsPlugin::OnPluginEnd()
