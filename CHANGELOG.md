@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.2](https://github.com/untrustedmodders/plugify-configs/compare/v1.0.1...v1.0.2) (2025-03-24)
+
+
+### Bug Fixes
+
+* add JSONC reader ([affca40](https://github.com/untrustedmodders/plugify-configs/commit/affca4089d32ee5fa43ba3acfde96b686d74f8bf))
+* build when dependency ([19ec151](https://github.com/untrustedmodders/plugify-configs/commit/19ec15136876bd23322297bd3fe8c26aacbbe759))
+
 ## [1.0.1](https://github.com/untrustedmodders/plugify-configs/compare/v1.0.0...v1.0.1) (2025-03-23)
 
 
