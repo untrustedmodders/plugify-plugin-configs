@@ -1,1 +1,4 @@
-pcf::*
+Plugify_*
+extern "C++" {
+    pcf::*
+}
