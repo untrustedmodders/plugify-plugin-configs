@@ -1,6 +1,8 @@
 {
     global:
-        pcf::*;
+        extern "C++" {
+            pcf::*;
+        };
 
     local: *;
 };
