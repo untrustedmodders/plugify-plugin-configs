@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.4](https://github.com/untrustedmodders/plugify-configs/compare/v1.0.3...v1.0.4) (2025-04-01)
+
+
+### Bug Fixes
+
+* add Plugify_* namespace ([a65ec9f](https://github.com/untrustedmodders/plugify-configs/commit/a65ec9fd591610ed85523579b717ecd6d9d81c5a))
+* avoid non pcf export ([e983d8e](https://github.com/untrustedmodders/plugify-configs/commit/e983d8e0ad3fe213bf1c644d346fb71cb886b9b6))
+* use c++ extern ([2821896](https://github.com/untrustedmodders/plugify-configs/commit/28218969327160ba85a66164e4295b03e2c497f6))
+
 ## [1.0.3](https://github.com/untrustedmodders/plugify-configs/compare/v1.0.2...v1.0.3) (2025-03-24)
 
 
