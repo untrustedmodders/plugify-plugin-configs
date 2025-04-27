@@ -46,7 +46,7 @@ namespace pcf
 		PLUGIFY_CONFIGS_API void SetObject(std::string_view key);
 		PLUGIFY_CONFIGS_API void SetArray(std::string_view key);
 
-		inline void Set(std::string_view key, nullptr_t) { SetNull(key); };
+		inline void Set(std::string_view key, std::nullptr_t) { SetNull(key); };
 		PLUGIFY_CONFIGS_API void Set(std::string_view key, bool value);
 		PLUGIFY_CONFIGS_API void Set(std::string_view key, int32_t value);
 		PLUGIFY_CONFIGS_API void Set(std::string_view key, int64_t value);

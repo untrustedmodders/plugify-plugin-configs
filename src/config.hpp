@@ -80,7 +80,7 @@ namespace pcf {
 
 		private:
 			Node();
-			Node(nullptr_t);
+			Node(std::nullptr_t);
 
 		private:
 			StorageType _storage = ObjectType{};

@@ -797,7 +797,7 @@ namespace plg {
 					std::rotate(pointer_position, _end - 1, _end);
 				}
 			}
-			return begin() + position_distance;
+			return begin() + static_cast<ptrdiff_t>(position_distance);
 		}
 
 		constexpr iterator erase(const_iterator position) {

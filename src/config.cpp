@@ -182,7 +182,7 @@ namespace pcf {
 
 	Config::Detail::Node::Node() = default;
 
-	Config::Detail::Node::Node(nullptr_t)
+	Config::Detail::Node::Node(std::nullptr_t)
 		: _storage(nullptr), _objCache{} {
 	}
 
@@ -436,7 +436,7 @@ namespace pcf {
 			} else {
 				const auto i = static_cast<size_t>(-n) - 1;
 				if (i < arr->size()) {
-					const auto it = arr->rbegin() + i;
+					const auto it = arr->rbegin() + static_cast<ptrdiff_t>(i);
 					_arrCache = it.base();
 					return it->get();
 				}
