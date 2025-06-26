@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.6](https://github.com/untrustedmodders/plugify-configs/compare/v1.0.5...v1.0.6) (2025-06-26)
+
+
+### Bug Fixes
+
+* add default build type ([37fd60f](https://github.com/untrustedmodders/plugify-configs/commit/37fd60f3cd8ab0e0eada7124967db6c135926139))
+* update arch tags for action build ([3d9afd8](https://github.com/untrustedmodders/plugify-configs/commit/3d9afd830c3598ad7f71cc6a14af89a53a01758e))
+* update plugify ([e71d3a3](https://github.com/untrustedmodders/plugify-configs/commit/e71d3a359f7793b256f5fa3f07243eb443874b7d))
+* update plugify ([21084e0](https://github.com/untrustedmodders/plugify-configs/commit/21084e0e718fd9bb083c7e8e0950c323fb8b1aa0))
+* update version naming ([5dd4d89](https://github.com/untrustedmodders/plugify-configs/commit/5dd4d89c6a830326613428229f39ea3588f55334))
+
 ## [1.0.5](https://github.com/untrustedmodders/plugify-configs/compare/v1.0.4...v1.0.5) (2025-04-27)
 
 
