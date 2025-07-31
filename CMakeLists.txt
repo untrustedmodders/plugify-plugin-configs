@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
 if(POLICY CMP0092)
     cmake_policy(SET CMP0092 NEW) # Don't add -W3 warning level by default.
 endif()
@@ -38,12 +40,12 @@ endif()
 #
 # Format
 #
-include(cmake/compat_format.cmake)
+include(CompatFormat)
 
 #
 # Glaze
 #
-include(cmake/glaze.cmake)
+include(FetchGlaze)
 
 #
 # Plugin
