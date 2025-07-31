@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.7](https://github.com/untrustedmodders/plugify-configs/compare/v1.0.6...v1.0.7) (2025-07-31)
+
+
+### Bug Fixes
+
+* add C++23 support ([cd3c424](https://github.com/untrustedmodders/plugify-configs/commit/cd3c4242cd597663b60c5b7413c29104fe2b6835))
+* bump c++ version ([a55af90](https://github.com/untrustedmodders/plugify-configs/commit/a55af9073ab094dd4d4b2dbd60c10fd29957e546))
+* bump gcc to 14 ([abc58b8](https://github.com/untrustedmodders/plugify-configs/commit/abc58b83f26d938d7208640209320141fec5995b))
+* bump glaze ([91c2042](https://github.com/untrustedmodders/plugify-configs/commit/91c20422bc8edcc30488bed1a872641a27f6f4d5))
+* modernize cmake ([b635432](https://github.com/untrustedmodders/plugify-configs/commit/b635432811a71c77ea4dca4a831bb008508dceb6))
+* update readme and add missing permission ([c3f4baf](https://github.com/untrustedmodders/plugify-configs/commit/c3f4baf1e6ac09ab914ec327aaa4d50eccbf96f2))
+
 ## [1.0.6](https://github.com/untrustedmodders/plugify-configs/compare/v1.0.5...v1.0.6) (2025-06-26)
 
 
