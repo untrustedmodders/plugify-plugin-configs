@@ -1,6 +1,6 @@
 #pragma once
 #include <memory>
-#include <plugify/cpp_plugin.hpp>
+#include <plg/plugin.hpp>
 #include <string_view>
 
 namespace pcf {

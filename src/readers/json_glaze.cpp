@@ -1,8 +1,10 @@
-#include <glaze/glaze.hpp>
 #include <memory>
+#include <string_view>
+
+#include <glaze/glaze.hpp>
+
 #include <plugify-configs/methods.hpp>
 #include <plugify-configs/plugify-configs.hpp>
-#include <string_view>
 
 namespace pcf {
 	static void MapJson(glz::json_t& json, Config& config) {

@@ -38,11 +38,6 @@ if(UNIX AND NOT APPLE)
 endif()
 
 #
-# Format
-#
-include(CompatFormat)
-
-#
 # Glaze
 #
 include(FetchGlaze)
@@ -81,7 +76,7 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
         PLUGIFY_FORMAT_SUPPORT=$<BOOL:${COMPILER_SUPPORTS_FORMAT}>
         PLUGIFY_IS_DEBUG=$<STREQUAL:${CMAKE_BUILD_TYPE},Debug>)
 if(NOT COMPILER_SUPPORTS_FORMAT)
-    target_link_libraries(${PROJECT_NAME} PRIVATE fmt::fmt-header-only)
+    #target_link_libraries(${PROJECT_NAME} PRIVATE fmt::fmt-header-only)
 endif()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE glaze::glaze)

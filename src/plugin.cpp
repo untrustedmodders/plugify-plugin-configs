@@ -1,6 +1,7 @@
 #include "plugin.hpp"
 #include "readerfactory.hpp"
 #include "readers/json_glaze.hpp"
+
 #include <plugify-configs/plugify-configs.hpp>
 #include <plugify_configs_export.h>
 

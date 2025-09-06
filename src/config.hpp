@@ -2,13 +2,14 @@
 #include <deque>
 #include <map>
 #include <memory>
+#include <variant>
+
 #include <plugify-configs/methods.hpp>
 #include <plugify-configs/plugify-configs.hpp>
-#include <plugify/compat_format.hpp>
-#include <plugify/string.hpp>
-#include <plugify/variant.hpp>
-#include <plugify/vector.hpp>
-#include <variant>
+#include <plg/format.hpp>
+#include <plg/string.hpp>
+#include <plg/variant.hpp>
+#include <plg/vector.hpp>
 
 namespace pcf {
 	class Config::Detail {
