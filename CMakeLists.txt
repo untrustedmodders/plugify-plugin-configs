@@ -10,17 +10,17 @@ endif()
 file(READ "${CMAKE_CURRENT_SOURCE_DIR}/version.txt" VERSION_FILE_CONTENTS)
 string(STRIP "${VERSION_FILE_CONTENTS}" VERSION_FILE_CONTENTS)
 set(CONFIGS_VERSION "${VERSION_FILE_CONTENTS}" CACHE STRING "Set version name")
-set(CONFIGS_PACKAGE "plugify-configs" CACHE STRING "Set package name")
+set(CONFIGS_PACKAGE "configs" CACHE STRING "Set package name")
 string(REPLACE "v" "" CONFIGS_VERSION "${CONFIGS_VERSION}")
 string(REGEX REPLACE "[.+-]" ";" CONFIGS_VERSION_LIST ${CONFIGS_VERSION})
 list(GET CONFIGS_VERSION_LIST 0 CONFIGS_VERSION_MAJOR)
 list(GET CONFIGS_VERSION_LIST 1 CONFIGS_VERSION_MINOR)
 list(GET CONFIGS_VERSION_LIST 2 CONFIGS_VERSION_PATCH)
 
-project(plugify-configs 
+project(plugify-plugin-configs
         VERSION "${CONFIGS_VERSION_MAJOR}.${CONFIGS_VERSION_MINOR}.${CONFIGS_VERSION_PATCH}"
         DESCRIPTION "Configs Plugin" 
-        HOMEPAGE_URL "https://github.com/untrustedmodders" 
+        HOMEPAGE_URL "https://github.com/untrustedmodders/plugify-plugin-configs" 
         LANGUAGES CXX
 )
 
@@ -58,7 +58,7 @@ else()
 endif()
 
 if(LINUX)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE _GLIBCXX_USE_CXX11_ABI=0)
+    #target_compile_definitions(${PROJECT_NAME} PRIVATE _GLIBCXX_USE_CXX11_ABI=1)
     target_link_libraries(${PROJECT_NAME} PRIVATE -static-libstdc++ -static-libgcc)
 endif()
 
@@ -82,6 +82,6 @@ endif()
 target_link_libraries(${PROJECT_NAME} PRIVATE glaze::glaze)
 
 configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/plugify-configs.pplugin.in
-    ${CMAKE_CURRENT_BINARY_DIR}/plugify-configs.pplugin
+    ${CMAKE_CURRENT_SOURCE_DIR}/plugify-plugin-configs.pplugin.in
+    ${CMAKE_CURRENT_BINARY_DIR}/plugify-plugin-configs.pplugin
 )

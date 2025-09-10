@@ -81,7 +81,7 @@ namespace plg {
 		plg::vector<plg::Dependency> GetDependencies() const { return plugin::GetDependencies(plugin::handle); }
 
 		virtual void OnPluginStart() {};
-		virtual void OnPluginUpdate(std::chrono::microseconds) {};
+		virtual void OnPluginUpdate(std::chrono::milliseconds) {};
 		virtual void OnPluginEnd() {};
 	};
 
@@ -149,7 +149,7 @@ namespace plg {
         template<typename T, typename = void> \
         struct has_overridden_OnPluginUpdate : std::false_type {}; \
         template<typename T> \
-        struct has_overridden_OnPluginUpdate<T, std::void_t<decltype(std::declval<T>().OnPluginUpdate(std::chrono::microseconds{0}))>> \
+        struct has_overridden_OnPluginUpdate<T, std::void_t<decltype(std::declval<T>().OnPluginUpdate(std::chrono::milliseconds{0}))>> \
             : std::bool_constant<!std::is_same_v<decltype(&T::OnPluginUpdate), \
                                                  decltype(&IPluginEntry::OnPluginUpdate)>> {}; \
         template<typename T, typename = void> \
@@ -161,7 +161,7 @@ namespace plg {
         extern "C" plugin_api void Plugify_PluginStart() { \
             GetPluginEntry()->OnPluginStart(); \
         } \
-        extern "C" plugin_api void Plugify_PluginUpdate(std::chrono::microseconds dt) { \
+        extern "C" plugin_api void Plugify_PluginUpdate(std::chrono::milliseconds dt) { \
             GetPluginEntry()->OnPluginUpdate(dt); \
         } \
         extern "C" plugin_api void Plugify_PluginEnd() { \
