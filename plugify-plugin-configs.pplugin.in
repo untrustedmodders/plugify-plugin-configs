@@ -4,7 +4,7 @@
   "name": "${CONFIGS_PACKAGE}",
   "description": "A plugin that provides a system to read and write configuration files.",
   "author": "untrustedmodders",
-  "webiste": "https://github.com/untrustedmodders/",
+f  "website": "https://github.com/untrustedmodders/",
   "license": "MIT",
   "entry": "bin/plugify-plugin-configs",
   "platforms": [],
