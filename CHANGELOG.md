@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1](https://github.com/untrustedmodders/plugify-plugin-configs/compare/v2.0.0...v2.0.1) (2025-09-19)
+
+
+### Bug Fixes
+
+* build ([cc43776](https://github.com/untrustedmodders/plugify-plugin-configs/commit/cc43776cfb8ed05577b158e11673c8446725946f))
+
 ## [2.0.0](https://github.com/untrustedmodders/plugify-plugin-configs/compare/v1.0.7...v2.0.0) (2025-09-14)
 
 
