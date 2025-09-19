@@ -101,7 +101,7 @@ jobs:
       - name: Configure
         shell: bash -el {0}
         run: |
-          cmake -S . -B build -G "Ninja" -DCONFIGS_PACKAGE="${{ needs.setup.outputs.tag_name }}"
+          cmake -S . -B build -G "Ninja" -DCONFIGS_VERSION="${{ needs.setup.outputs.tag_name }}"
 
       - name: Build
         shell: bash -el {0}
