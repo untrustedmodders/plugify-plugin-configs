@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.3](https://github.com/untrustedmodders/plugify-plugin-configs/compare/v2.0.2...v2.0.3) (2025-10-03)
+
+
+### Bug Fixes
+
+* add `out` folder to .gitignore ([8eea2dc](https://github.com/untrustedmodders/plugify-plugin-configs/commit/8eea2dca18df04d03d58605470615370ff284b8b))
+* improve san and debug symbols on windows ([45c3214](https://github.com/untrustedmodders/plugify-plugin-configs/commit/45c32146a3d6d165a7417aa733deddee48a4e2ec))
+
 ## [2.0.2](https://github.com/untrustedmodders/plugify-plugin-configs/compare/v2.0.1...v2.0.2) (2025-09-27)
 
 
