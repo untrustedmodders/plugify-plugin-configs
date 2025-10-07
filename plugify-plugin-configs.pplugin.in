@@ -10,5 +10,1328 @@
   "platforms": [],
   "language": "cpp",
   "dependencies": [],
-  "methods": []
+  "methods": [
+    {
+      "name": "Read",
+      "group": "Configuration",
+      "description": "Reads a configuration file from the specified path.",
+      "funcName": "Read",
+      "paramTypes": [
+        {
+          "name": "path",
+          "type": "string",
+          "ref": false,
+          "description": "Path to the configuration file."
+        }
+      ],
+      "retType": {
+        "type": "ptr64",
+        "description": "Pointer to the Config object, or nullptr if reading failed."
+      }
+    },
+    {
+      "name": "ReadMultiple",
+      "group": "Configuration",
+      "description": "Reads multiple configuration files and merges them.",
+      "funcName": "ReadMultiple",
+      "paramTypes": [
+        {
+          "name": "paths",
+          "type": "vector_string",
+          "ref": false,
+          "description": "Vector of paths to configuration files."
+        }
+      ],
+      "retType": {
+        "type": "ptr64",
+        "description": "Pointer to the merged Config object, or nullptr if reading failed."
+      }
+    },
+    {
+      "name": "Make",
+      "group": "Configuration",
+      "description": "Creates a new empty configuration object.",
+      "funcName": "Make",
+      "paramTypes": [],
+      "retType": {
+        "type": "ptr64",
+        "description": "Pointer to the newly created Config object."
+      }
+    },
+    {
+      "name": "Delete",
+      "group": "Configuration",
+      "description": "Deletes a configuration object and frees its memory.",
+      "funcName": "Delete",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object to delete."
+        }
+      ],
+      "retType": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "SetError",
+      "group": "Error Handling",
+      "description": "Sets an error message for the configuration system.",
+      "funcName": "SetError",
+      "paramTypes": [
+        {
+          "name": "error",
+          "type": "string",
+          "ref": false,
+          "description": "The error message to set."
+        }
+      ],
+      "retType": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "GetError",
+      "group": "Error Handling",
+      "description": "Retrieves the last error message from the configuration system.",
+      "funcName": "GetError",
+      "paramTypes": [],
+      "retType": {
+        "type": "string",
+        "description": "The last error message."
+      }
+    },
+    {
+      "name": "Merge",
+      "group": "Merge Operations",
+      "description": "Merges another configuration object into the current one.",
+      "funcName": "Merge",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the target Config object."
+        },
+        {
+          "name": "other",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object to merge from."
+        }
+      ],
+      "retType": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "MergeMove",
+      "group": "Merge Operations",
+      "description": "Merges another configuration object into the current one with move semantics.",
+      "funcName": "MergeMove",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the target Config object."
+        },
+        {
+          "name": "other",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object to merge from (will be moved)."
+        }
+      ],
+      "retType": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "GetType",
+      "group": "Type Checking",
+      "description": "Returns the type of the current configuration node.",
+      "funcName": "GetType",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        }
+      ],
+      "retType": {
+        "type": "int32",
+        "description": "The NodeType enum value."
+      }
+    },
+    {
+      "name": "IsNull",
+      "group": "Type Checking",
+      "description": "Checks if the current node is null.",
+      "funcName": "IsNull",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        }
+      ],
+      "retType": {
+        "type": "bool",
+        "description": "True if the node is null, false otherwise."
+      }
+    },
+    {
+      "name": "IsBool",
+      "group": "Type Checking",
+      "description": "Checks if the current node is a boolean.",
+      "funcName": "IsBool",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        }
+      ],
+      "retType": {
+        "type": "bool",
+        "description": "True if the node is a boolean, false otherwise."
+      }
+    },
+    {
+      "name": "IsInt",
+      "group": "Type Checking",
+      "description": "Checks if the current node is an integer.",
+      "funcName": "IsInt",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        }
+      ],
+      "retType": {
+        "type": "bool",
+        "description": "True if the node is an integer, false otherwise."
+      }
+    },
+    {
+      "name": "IsFloat",
+      "group": "Type Checking",
+      "description": "Checks if the current node is a float.",
+      "funcName": "IsFloat",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        }
+      ],
+      "retType": {
+        "type": "bool",
+        "description": "True if the node is a float, false otherwise."
+      }
+    },
+    {
+      "name": "IsString",
+      "group": "Type Checking",
+      "description": "Checks if the current node is a string.",
+      "funcName": "IsString",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        }
+      ],
+      "retType": {
+        "type": "bool",
+        "description": "True if the node is a string, false otherwise."
+      }
+    },
+    {
+      "name": "IsObject",
+      "group": "Type Checking",
+      "description": "Checks if the current node is an object.",
+      "funcName": "IsObject",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        }
+      ],
+      "retType": {
+        "type": "bool",
+        "description": "True if the node is an object, false otherwise."
+      }
+    },
+    {
+      "name": "IsArray",
+      "group": "Type Checking",
+      "description": "Checks if the current node is an array.",
+      "funcName": "IsArray",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        }
+      ],
+      "retType": {
+        "type": "bool",
+        "description": "True if the node is an array, false otherwise."
+      }
+    },
+    {
+      "name": "SetNull",
+      "group": "Set Methods",
+      "description": "Sets a configuration value to null.",
+      "funcName": "SetNull",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "ref": false,
+          "description": "The key to set."
+        }
+      ],
+      "retType": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "SetObject",
+      "group": "Set Methods",
+      "description": "Sets a configuration value to an empty object.",
+      "funcName": "SetObject",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "ref": false,
+          "description": "The key to set."
+        }
+      ],
+      "retType": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "SetArray",
+      "group": "Set Methods",
+      "description": "Sets a configuration value to an empty array.",
+      "funcName": "SetArray",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "ref": false,
+          "description": "The key to set."
+        }
+      ],
+      "retType": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "SetBool",
+      "group": "Set Methods",
+      "description": "Sets a boolean configuration value.",
+      "funcName": "SetBool",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "ref": false,
+          "description": "The key to set."
+        },
+        {
+          "name": "value",
+          "type": "bool",
+          "ref": false,
+          "description": "The boolean value to set."
+        }
+      ],
+      "retType": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "SetInt",
+      "group": "Set Methods",
+      "description": "Sets an integer configuration value.",
+      "funcName": "SetInt",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "ref": false,
+          "description": "The key to set."
+        },
+        {
+          "name": "value",
+          "type": "int64",
+          "ref": false,
+          "description": "The integer value to set."
+        }
+      ],
+      "retType": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "SetFloat",
+      "group": "Set Methods",
+      "description": "Sets a float configuration value.",
+      "funcName": "SetFloat",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "ref": false,
+          "description": "The key to set."
+        },
+        {
+          "name": "value",
+          "type": "double",
+          "ref": false,
+          "description": "The float value to set."
+        }
+      ],
+      "retType": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "SetString",
+      "group": "Set Methods",
+      "description": "Sets a string configuration value.",
+      "funcName": "SetString",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "ref": false,
+          "description": "The key to set."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "ref": false,
+          "description": "The string value to set."
+        }
+      ],
+      "retType": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "TrySetFromBool",
+      "group": "TrySet Methods",
+      "description": "Attempts to set a configuration value from a boolean, with type conversion if needed.",
+      "funcName": "TrySetFromBool",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "ref": false,
+          "description": "The key to set."
+        },
+        {
+          "name": "value",
+          "type": "bool",
+          "ref": false,
+          "description": "The boolean value to set."
+        }
+      ],
+      "retType": {
+        "type": "bool",
+        "description": "True if the value was set successfully, false otherwise."
+      }
+    },
+    {
+      "name": "TrySetFromInt",
+      "group": "TrySet Methods",
+      "description": "Attempts to set a configuration value from an integer, with type conversion if needed.",
+      "funcName": "TrySetFromInt",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "ref": false,
+          "description": "The key to set."
+        },
+        {
+          "name": "value",
+          "type": "int64",
+          "ref": false,
+          "description": "The integer value to set."
+        }
+      ],
+      "retType": {
+        "type": "bool",
+        "description": "True if the value was set successfully, false otherwise."
+      }
+    },
+    {
+      "name": "TrySetFromFloat",
+      "group": "TrySet Methods",
+      "description": "Attempts to set a configuration value from a float, with type conversion if needed.",
+      "funcName": "TrySetFromFloat",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "ref": false,
+          "description": "The key to set."
+        },
+        {
+          "name": "value",
+          "type": "double",
+          "ref": false,
+          "description": "The float value to set."
+        }
+      ],
+      "retType": {
+        "type": "bool",
+        "description": "True if the value was set successfully, false otherwise."
+      }
+    },
+    {
+      "name": "TrySetFromString",
+      "group": "TrySet Methods",
+      "description": "Attempts to set a configuration value from a string, with type conversion if needed.",
+      "funcName": "TrySetFromString",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "ref": false,
+          "description": "The key to set."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "ref": false,
+          "description": "The string value to set."
+        }
+      ],
+      "retType": {
+        "type": "bool",
+        "description": "True if the value was set successfully, false otherwise."
+      }
+    },
+    {
+      "name": "PushNull",
+      "group": "Array Push Methods",
+      "description": "Pushes a null value to the current array node.",
+      "funcName": "PushNull",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        }
+      ],
+      "retType": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "PushBool",
+      "group": "Array Push Methods",
+      "description": "Pushes a boolean value to the current array node.",
+      "funcName": "PushBool",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "value",
+          "type": "bool",
+          "ref": false,
+          "description": "The boolean value to push."
+        }
+      ],
+      "retType": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "PushInt",
+      "group": "Array Push Methods",
+      "description": "Pushes an integer value to the current array node.",
+      "funcName": "PushInt",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "value",
+          "type": "int64",
+          "ref": false,
+          "description": "The integer value to push."
+        }
+      ],
+      "retType": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "PushFloat",
+      "group": "Array Push Methods",
+      "description": "Pushes a float value to the current array node.",
+      "funcName": "PushFloat",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "value",
+          "type": "double",
+          "ref": false,
+          "description": "The float value to push."
+        }
+      ],
+      "retType": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "PushString",
+      "group": "Array Push Methods",
+      "description": "Pushes a string value to the current array node.",
+      "funcName": "PushString",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "ref": false,
+          "description": "The string value to push."
+        }
+      ],
+      "retType": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "PushObject",
+      "group": "Array Push Methods",
+      "description": "Pushes an empty object to the current array node.",
+      "funcName": "PushObject",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        }
+      ],
+      "retType": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "PushArray",
+      "group": "Array Push Methods",
+      "description": "Pushes an empty array to the current array node.",
+      "funcName": "PushArray",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        }
+      ],
+      "retType": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "GetBool",
+      "group": "Get Methods",
+      "description": "Retrieves a boolean value from the configuration.",
+      "funcName": "GetBool",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "ref": false,
+          "description": "The key to retrieve."
+        },
+        {
+          "name": "defaultValue",
+          "type": "bool",
+          "ref": false,
+          "description": "The default value to return if the key is not found."
+        }
+      ],
+      "retType": {
+        "type": "bool",
+        "description": "The boolean value if found, otherwise the default value."
+      }
+    },
+    {
+      "name": "GetInt",
+      "group": "Get Methods",
+      "description": "Retrieves an integer value from the configuration.",
+      "funcName": "GetInt",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "ref": false,
+          "description": "The key to retrieve."
+        },
+        {
+          "name": "defaultValue",
+          "type": "int64",
+          "ref": false,
+          "description": "The default value to return if the key is not found."
+        }
+      ],
+      "retType": {
+        "type": "int64",
+        "description": "The integer value if found, otherwise the default value."
+      }
+    },
+    {
+      "name": "GetFloat",
+      "group": "Get Methods",
+      "description": "Retrieves a float value from the configuration.",
+      "funcName": "GetFloat",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "ref": false,
+          "description": "The key to retrieve."
+        },
+        {
+          "name": "defaultValue",
+          "type": "double",
+          "ref": false,
+          "description": "The default value to return if the key is not found."
+        }
+      ],
+      "retType": {
+        "type": "double",
+        "description": "The float value if found, otherwise the default value."
+      }
+    },
+    {
+      "name": "GetString",
+      "group": "Get Methods",
+      "description": "Retrieves a string value from the configuration.",
+      "funcName": "GetString",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "ref": false,
+          "description": "The key to retrieve."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "ref": false,
+          "description": "The default value to return if the key is not found."
+        }
+      ],
+      "retType": {
+        "type": "string",
+        "description": "The string value if found, otherwise the default value."
+      }
+    },
+    {
+      "name": "GetAsBool",
+      "group": "GetAs Methods",
+      "description": "Retrieves a value from the configuration and converts it to boolean.",
+      "funcName": "GetAsBool",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "ref": false,
+          "description": "The key to retrieve."
+        },
+        {
+          "name": "defaultValue",
+          "type": "bool",
+          "ref": false,
+          "description": "The default value to return if the key is not found."
+        }
+      ],
+      "retType": {
+        "type": "bool",
+        "description": "The boolean value if found and convertible, otherwise the default value."
+      }
+    },
+    {
+      "name": "GetAsInt",
+      "group": "GetAs Methods",
+      "description": "Retrieves a value from the configuration and converts it to integer.",
+      "funcName": "GetAsInt",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "ref": false,
+          "description": "The key to retrieve."
+        },
+        {
+          "name": "defaultValue",
+          "type": "int64",
+          "ref": false,
+          "description": "The default value to return if the key is not found."
+        }
+      ],
+      "retType": {
+        "type": "int64",
+        "description": "The integer value if found and convertible, otherwise the default value."
+      }
+    },
+    {
+      "name": "GetAsFloat",
+      "group": "GetAs Methods",
+      "description": "Retrieves a value from the configuration and converts it to float.",
+      "funcName": "GetAsFloat",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "ref": false,
+          "description": "The key to retrieve."
+        },
+        {
+          "name": "defaultValue",
+          "type": "double",
+          "ref": false,
+          "description": "The default value to return if the key is not found."
+        }
+      ],
+      "retType": {
+        "type": "double",
+        "description": "The float value if found and convertible, otherwise the default value."
+      }
+    },
+    {
+      "name": "GetAsString",
+      "group": "GetAs Methods",
+      "description": "Retrieves a value from the configuration and converts it to string.",
+      "funcName": "GetAsString",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "ref": false,
+          "description": "The key to retrieve."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "ref": false,
+          "description": "The default value to return if the key is not found."
+        }
+      ],
+      "retType": {
+        "type": "string",
+        "description": "The string value if found and convertible, otherwise the default value."
+      }
+    },
+    {
+      "name": "HasKey",
+      "group": "Query Methods",
+      "description": "Checks if a key exists in the current configuration node.",
+      "funcName": "HasKey",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "ref": false,
+          "description": "The key to check."
+        }
+      ],
+      "retType": {
+        "type": "bool",
+        "description": "True if the key exists, false otherwise."
+      }
+    },
+    {
+      "name": "Empty",
+      "group": "Query Methods",
+      "description": "Checks if the current configuration node is empty.",
+      "funcName": "Empty",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        }
+      ],
+      "retType": {
+        "type": "bool",
+        "description": "True if the node is empty, false otherwise."
+      }
+    },
+    {
+      "name": "GetSize",
+      "group": "Query Methods",
+      "description": "Returns the size of the current configuration node (number of elements in array or object).",
+      "funcName": "GetSize",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        }
+      ],
+      "retType": {
+        "type": "int64",
+        "description": "The size of the node."
+      }
+    },
+    {
+      "name": "GetName",
+      "group": "Query Methods",
+      "description": "Returns the name of the current configuration node.",
+      "funcName": "GetName",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        }
+      ],
+      "retType": {
+        "type": "string",
+        "description": "The name of the node."
+      }
+    },
+    {
+      "name": "GetPath",
+      "group": "Query Methods",
+      "description": "Returns the full path to the current configuration node.",
+      "funcName": "GetPath",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        }
+      ],
+      "retType": {
+        "type": "string",
+        "description": "The path to the node."
+      }
+    },
+    {
+      "name": "JumpFirst",
+      "group": "Navigation Methods",
+      "description": "Jumps to the first child node in the current configuration node.",
+      "funcName": "JumpFirst",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        }
+      ],
+      "retType": {
+        "type": "bool",
+        "description": "True if the jump was successful, false otherwise."
+      }
+    },
+    {
+      "name": "JumpLast",
+      "group": "Navigation Methods",
+      "description": "Jumps to the last child node in the current configuration node.",
+      "funcName": "JumpLast",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        }
+      ],
+      "retType": {
+        "type": "bool",
+        "description": "True if the jump was successful, false otherwise."
+      }
+    },
+    {
+      "name": "JumpNext",
+      "group": "Navigation Methods",
+      "description": "Jumps to the next sibling node in the current configuration level.",
+      "funcName": "JumpNext",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        }
+      ],
+      "retType": {
+        "type": "bool",
+        "description": "True if the jump was successful, false otherwise."
+      }
+    },
+    {
+      "name": "JumpPrev",
+      "group": "Navigation Methods",
+      "description": "Jumps to the previous sibling node in the current configuration level.",
+      "funcName": "JumpPrev",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        }
+      ],
+      "retType": {
+        "type": "bool",
+        "description": "True if the jump was successful, false otherwise."
+      }
+    },
+    {
+      "name": "JumpKey",
+      "group": "Navigation Methods",
+      "description": "Jumps to a child node with the specified key, optionally creating it if it doesn't exist.",
+      "funcName": "JumpKey",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "ref": false,
+          "description": "The key of the node to jump to."
+        },
+        {
+          "name": "create",
+          "type": "bool",
+          "ref": false,
+          "description": "If true, creates the node if it doesn't exist."
+        }
+      ],
+      "retType": {
+        "type": "bool",
+        "description": "True if the jump was successful, false otherwise."
+      }
+    },
+    {
+      "name": "JumpN",
+      "group": "Navigation Methods",
+      "description": "Jumps to the nth child node in the current configuration node.",
+      "funcName": "JumpN",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "n",
+          "type": "int32",
+          "ref": false,
+          "description": "The index of the child node to jump to."
+        }
+      ],
+      "retType": {
+        "type": "bool",
+        "description": "True if the jump was successful, false otherwise."
+      }
+    },
+    {
+      "name": "JumpBack",
+      "group": "Navigation Methods",
+      "description": "Jumps back to the parent node in the configuration hierarchy.",
+      "funcName": "JumpBack",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        }
+      ],
+      "retType": {
+        "type": "bool",
+        "description": "True if the jump was successful, false otherwise."
+      }
+    },
+    {
+      "name": "JumpRoot",
+      "group": "Navigation Methods",
+      "description": "Jumps back to the root node of the configuration.",
+      "funcName": "JumpRoot",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        }
+      ],
+      "retType": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "Remove",
+      "group": "Removal Methods",
+      "description": "Removes the current configuration node.",
+      "funcName": "Remove",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        }
+      ],
+      "retType": {
+        "type": "int32",
+        "description": "The number of nodes removed."
+      }
+    },
+    {
+      "name": "RemoveKey",
+      "group": "Removal Methods",
+      "description": "Removes a child node with the specified key from the current configuration node.",
+      "funcName": "RemoveKey",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "ref": false,
+          "description": "The key of the node to remove."
+        }
+      ],
+      "retType": {
+        "type": "bool",
+        "description": "True if the node was removed successfully, false otherwise."
+      }
+    },
+    {
+      "name": "Clear",
+      "group": "Removal Methods",
+      "description": "Clears all child nodes from the current configuration node.",
+      "funcName": "Clear",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        }
+      ],
+      "retType": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "NodeToJsonString",
+      "group": "JSON Export",
+      "description": "Converts the current configuration node to a JSON string.",
+      "funcName": "NodeToJsonString",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        }
+      ],
+      "retType": {
+        "type": "string",
+        "description": "The JSON string representation of the current node."
+      }
+    },
+    {
+      "name": "RootToJsonString",
+      "group": "JSON Export",
+      "description": "Converts the entire configuration tree to a JSON string.",
+      "funcName": "RootToJsonString",
+      "paramTypes": [
+        {
+          "name": "config",
+          "type": "ptr64",
+          "ref": false,
+          "description": "Pointer to the Config object."
+        }
+      ],
+      "retType": {
+        "type": "string",
+        "description": "The JSON string representation of the entire configuration tree."
+      }
+    }
+  ]
 }
