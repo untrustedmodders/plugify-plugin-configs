@@ -52,9 +52,12 @@ namespace pcf {
 			return nullptr;
 		}
 
+		size_t merged = 0;
+
 		for (const std::string_view& path: paths) {
 			namespace fs = std::filesystem;
-			if (fs::exists(path)) {
+			std::error_code ec;
+			if (fs::exists(path, ec)) {
 				auto overrideConfig = _factory->ReadConfig(path);
 				if (!overrideConfig) {
 					if (_error.empty()) {
@@ -63,7 +66,13 @@ namespace pcf {
 					return nullptr;
 				}
 				config->MergeMove(std::move(*overrideConfig));
+				++merged;
 			}
+		}
+
+		if (merged == 0) {
+			_error = "Failed to find any config at paths";
+			return nullptr;
 		}
 
 		return config;
