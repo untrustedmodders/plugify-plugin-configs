@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.0.4](https://github.com/untrustedmodders/plugify-plugin-configs/compare/v2.0.3...v2.0.4) (2025-10-12)
+
+
+### Bug Fixes
+
+* add error if configs where not merged ([e50b5e1](https://github.com/untrustedmodders/plugify-plugin-configs/commit/e50b5e193d2349a8581f8e62a9b0311397142fe1))
+* export methods to plugify ([d295b9a](https://github.com/untrustedmodders/plugify-plugin-configs/commit/d295b9a0b4a7e090cb76c3151890dd5d0f091eea))
+* update includes ([d366be0](https://github.com/untrustedmodders/plugify-plugin-configs/commit/d366be0092ead86f4c36075522796d9fe983a7c2))
+
 ## [2.0.3](https://github.com/untrustedmodders/plugify-plugin-configs/compare/v2.0.2...v2.0.3) (2025-10-03)
 
 
