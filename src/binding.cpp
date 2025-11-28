@@ -3,6 +3,8 @@
 
 using namespace pcf;
 
+extern "C" {
+
 // Config creation and destruction
 PLUGIFY_CONFIGS_API Config* Read(const plg::string& path) {
     auto config = pcf::ReadConfig(path);
@@ -174,9 +176,9 @@ PLUGIFY_CONFIGS_API void PushFloat(Config* config, double value) {
     }
 }
 
-PLUGIFY_CONFIGS_API void PushString(Config* config, plg::string value) {
+PLUGIFY_CONFIGS_API void PushString(Config* config, const plg::string& value) {
     if (config) {
-        config->PushString(std::move(value));
+        config->PushString(value);
     }
 }
 
@@ -328,4 +330,5 @@ PLUGIFY_CONFIGS_API plg::string NodeToJsonString(Config* config) {
 PLUGIFY_CONFIGS_API plg::string RootToJsonString(Config* config) {
     if (!config) return plg::string();
     return config->RootToJsonString();
+}
 }

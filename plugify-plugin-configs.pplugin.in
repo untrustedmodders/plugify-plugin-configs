@@ -37,7 +37,7 @@
       "paramTypes": [
         {
           "name": "paths",
-          "type": "vector_string",
+          "type": "string[]",
           "ref": false,
           "description": "Vector of paths to configuration files."
         }
