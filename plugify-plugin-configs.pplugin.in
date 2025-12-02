@@ -1333,5 +1333,314 @@
         "description": "The JSON string representation of the entire configuration tree."
       }
     }
+  ],
+  "classes": [
+    {
+      "name": "Config",
+      "group": "Config",
+      "description": "RAII wrapper for Config pointer - provides configuration file reading, writing, and manipulation functionality.",
+      "handleType": "ptr64",
+      "invalidValue": "0",
+      "constructors": [
+        "Read",
+        "ReadMultiple",
+        "Make"
+      ],
+      "destructor": "Delete",
+      "bindings": [
+        {
+          "name": "SetError",
+          "method": "SetError",
+          "bindSelf": false
+        },
+        {
+          "name": "GetError",
+          "method": "GetError",
+          "bindSelf": false
+        },
+        {
+          "name": "Merge",
+          "method": "Merge",
+          "bindSelf": true,
+          "paramAliases": [
+            {
+              "name": "Config",
+              "owner": false
+            }
+          ]
+        },
+        {
+          "name": "MergeMove",
+          "method": "MergeMove",
+          "bindSelf": true,
+          "paramAliases": [
+            {
+              "name": "Config",
+              "owner": true
+            }
+          ]
+        },
+        {
+          "name": "GetType",
+          "method": "GetType",
+          "bindSelf": true
+        },
+        {
+          "name": "IsNull",
+          "method": "IsNull",
+          "bindSelf": true
+        },
+        {
+          "name": "IsBool",
+          "method": "IsBool",
+          "bindSelf": true
+        },
+        {
+          "name": "IsInt",
+          "method": "IsInt",
+          "bindSelf": true
+        },
+        {
+          "name": "IsFloat",
+          "method": "IsFloat",
+          "bindSelf": true
+        },
+        {
+          "name": "IsString",
+          "method": "IsString",
+          "bindSelf": true
+        },
+        {
+          "name": "IsObject",
+          "method": "IsObject",
+          "bindSelf": true
+        },
+        {
+          "name": "IsArray",
+          "method": "IsArray",
+          "bindSelf": true
+        },
+        {
+          "name": "SetNull",
+          "method": "SetNull",
+          "bindSelf": true
+        },
+        {
+          "name": "SetObject",
+          "method": "SetObject",
+          "bindSelf": true
+        },
+        {
+          "name": "SetArray",
+          "method": "SetArray",
+          "bindSelf": true
+        },
+        {
+          "name": "SetBool",
+          "method": "SetBool",
+          "bindSelf": true
+        },
+        {
+          "name": "SetInt",
+          "method": "SetInt",
+          "bindSelf": true
+        },
+        {
+          "name": "SetFloat",
+          "method": "SetFloat",
+          "bindSelf": true
+        },
+        {
+          "name": "SetString",
+          "method": "SetString",
+          "bindSelf": true
+        },
+        {
+          "name": "TrySetFromBool",
+          "method": "TrySetFromBool",
+          "bindSelf": true
+        },
+        {
+          "name": "TrySetFromInt",
+          "method": "TrySetFromInt",
+          "bindSelf": true
+        },
+        {
+          "name": "TrySetFromFloat",
+          "method": "TrySetFromFloat",
+          "bindSelf": true
+        },
+        {
+          "name": "TrySetFromString",
+          "method": "TrySetFromString",
+          "bindSelf": true
+        },
+        {
+          "name": "PushNull",
+          "method": "PushNull",
+          "bindSelf": true
+        },
+        {
+          "name": "PushBool",
+          "method": "PushBool",
+          "bindSelf": true
+        },
+        {
+          "name": "PushInt",
+          "method": "PushInt",
+          "bindSelf": true
+        },
+        {
+          "name": "PushFloat",
+          "method": "PushFloat",
+          "bindSelf": true
+        },
+        {
+          "name": "PushString",
+          "method": "PushString",
+          "bindSelf": true
+        },
+        {
+          "name": "PushObject",
+          "method": "PushObject",
+          "bindSelf": true
+        },
+        {
+          "name": "PushArray",
+          "method": "PushArray",
+          "bindSelf": true
+        },
+        {
+          "name": "GetBool",
+          "method": "GetBool",
+          "bindSelf": true
+        },
+        {
+          "name": "GetInt",
+          "method": "GetInt",
+          "bindSelf": true
+        },
+        {
+          "name": "GetFloat",
+          "method": "GetFloat",
+          "bindSelf": true
+        },
+        {
+          "name": "GetString",
+          "method": "GetString",
+          "bindSelf": true
+        },
+        {
+          "name": "GetAsBool",
+          "method": "GetAsBool",
+          "bindSelf": true
+        },
+        {
+          "name": "GetAsInt",
+          "method": "GetAsInt",
+          "bindSelf": true
+        },
+        {
+          "name": "GetAsFloat",
+          "method": "GetAsFloat",
+          "bindSelf": true
+        },
+        {
+          "name": "GetAsString",
+          "method": "GetAsString",
+          "bindSelf": true
+        },
+        {
+          "name": "HasKey",
+          "method": "HasKey",
+          "bindSelf": true
+        },
+        {
+          "name": "Empty",
+          "method": "Empty",
+          "bindSelf": true
+        },
+        {
+          "name": "GetSize",
+          "method": "GetSize",
+          "bindSelf": true
+        },
+        {
+          "name": "GetName",
+          "method": "GetName",
+          "bindSelf": true
+        },
+        {
+          "name": "GetPath",
+          "method": "GetPath",
+          "bindSelf": true
+        },
+        {
+          "name": "JumpFirst",
+          "method": "JumpFirst",
+          "bindSelf": true
+        },
+        {
+          "name": "JumpLast",
+          "method": "JumpLast",
+          "bindSelf": true
+        },
+        {
+          "name": "JumpNext",
+          "method": "JumpNext",
+          "bindSelf": true
+        },
+        {
+          "name": "JumpPrev",
+          "method": "JumpPrev",
+          "bindSelf": true
+        },
+        {
+          "name": "JumpKey",
+          "method": "JumpKey",
+          "bindSelf": true
+        },
+        {
+          "name": "JumpN",
+          "method": "JumpN",
+          "bindSelf": true
+        },
+        {
+          "name": "JumpBack",
+          "method": "JumpBack",
+          "bindSelf": true
+        },
+        {
+          "name": "JumpRoot",
+          "method": "JumpRoot",
+          "bindSelf": true
+        },
+        {
+          "name": "Remove",
+          "method": "Remove",
+          "bindSelf": true
+        },
+        {
+          "name": "RemoveKey",
+          "method": "RemoveKey",
+          "bindSelf": true
+        },
+        {
+          "name": "Clear",
+          "method": "Clear",
+          "bindSelf": true
+        },
+        {
+          "name": "NodeToJsonString",
+          "method": "NodeToJsonString",
+          "bindSelf": true
+        },
+        {
+          "name": "RootToJsonString",
+          "method": "RootToJsonString",
+          "bindSelf": true
+        }
+      ]
+    }
   ]
 }
