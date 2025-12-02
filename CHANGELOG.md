@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.6](https://github.com/untrustedmodders/plugify-plugin-configs/compare/v2.0.5...v2.0.6) (2025-12-02)
+
+
+### Bug Fixes
+
+* add class wrappers ([6005a56](https://github.com/untrustedmodders/plugify-plugin-configs/commit/6005a561ea8df9e46197dab216ec458e0d67c07b))
+
 ## [2.0.5](https://github.com/untrustedmodders/plugify-plugin-configs/compare/v2.0.4...v2.0.5) (2025-11-28)
 
 
