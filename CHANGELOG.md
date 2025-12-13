@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.7](https://github.com/untrustedmodders/plugify-plugin-configs/compare/v2.0.6...v2.0.7) (2025-12-13)
+
+
+### Bug Fixes
+
+* update plugify ([a93b07e](https://github.com/untrustedmodders/plugify-plugin-configs/commit/a93b07ea5bcc69e19267d3cad8a70a8b1a1f6188))
+* update plugify ([4933300](https://github.com/untrustedmodders/plugify-plugin-configs/commit/49333006ef278a2443c4e0ece0cb4776ad61a03e))
+
 ## [2.0.6](https://github.com/untrustedmodders/plugify-plugin-configs/compare/v2.0.5...v2.0.6) (2025-12-02)
 
 
