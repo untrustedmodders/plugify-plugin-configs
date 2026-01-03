@@ -77,7 +77,7 @@
     },
     {
       "name": "SetError",
-      "group": "Error Handling",
+      "group": "ErrorHandling",
       "description": "Sets an error message for the configuration system.",
       "funcName": "SetError",
       "paramTypes": [
@@ -94,7 +94,7 @@
     },
     {
       "name": "GetError",
-      "group": "Error Handling",
+      "group": "ErrorHandling",
       "description": "Retrieves the last error message from the configuration system.",
       "funcName": "GetError",
       "paramTypes": [],
@@ -105,7 +105,7 @@
     },
     {
       "name": "Merge",
-      "group": "Merge Operations",
+      "group": "MergeOperations",
       "description": "Merges another configuration object into the current one.",
       "funcName": "Merge",
       "paramTypes": [
@@ -128,7 +128,7 @@
     },
     {
       "name": "MergeMove",
-      "group": "Merge Operations",
+      "group": "MergeOperations",
       "description": "Merges another configuration object into the current one with move semantics.",
       "funcName": "MergeMove",
       "paramTypes": [
@@ -151,7 +151,7 @@
     },
     {
       "name": "GetType",
-      "group": "Type Checking",
+      "group": "TypeChecking",
       "description": "Returns the type of the current configuration node.",
       "funcName": "GetType",
       "paramTypes": [
@@ -169,7 +169,7 @@
     },
     {
       "name": "IsNull",
-      "group": "Type Checking",
+      "group": "TypeChecking",
       "description": "Checks if the current node is null.",
       "funcName": "IsNull",
       "paramTypes": [
@@ -187,7 +187,7 @@
     },
     {
       "name": "IsBool",
-      "group": "Type Checking",
+      "group": "TypeChecking",
       "description": "Checks if the current node is a boolean.",
       "funcName": "IsBool",
       "paramTypes": [
@@ -205,7 +205,7 @@
     },
     {
       "name": "IsInt",
-      "group": "Type Checking",
+      "group": "TypeChecking",
       "description": "Checks if the current node is an integer.",
       "funcName": "IsInt",
       "paramTypes": [
@@ -223,7 +223,7 @@
     },
     {
       "name": "IsFloat",
-      "group": "Type Checking",
+      "group": "TypeChecking",
       "description": "Checks if the current node is a float.",
       "funcName": "IsFloat",
       "paramTypes": [
@@ -241,7 +241,7 @@
     },
     {
       "name": "IsString",
-      "group": "Type Checking",
+      "group": "TypeChecking",
       "description": "Checks if the current node is a string.",
       "funcName": "IsString",
       "paramTypes": [
@@ -259,7 +259,7 @@
     },
     {
       "name": "IsObject",
-      "group": "Type Checking",
+      "group": "TypeChecking",
       "description": "Checks if the current node is an object.",
       "funcName": "IsObject",
       "paramTypes": [
@@ -277,7 +277,7 @@
     },
     {
       "name": "IsArray",
-      "group": "Type Checking",
+      "group": "TypeChecking",
       "description": "Checks if the current node is an array.",
       "funcName": "IsArray",
       "paramTypes": [
@@ -295,7 +295,7 @@
     },
     {
       "name": "SetNull",
-      "group": "Set Methods",
+      "group": "SetMethods",
       "description": "Sets a configuration value to null.",
       "funcName": "SetNull",
       "paramTypes": [
@@ -318,7 +318,7 @@
     },
     {
       "name": "SetObject",
-      "group": "Set Methods",
+      "group": "SetMethods",
       "description": "Sets a configuration value to an empty object.",
       "funcName": "SetObject",
       "paramTypes": [
@@ -341,7 +341,7 @@
     },
     {
       "name": "SetArray",
-      "group": "Set Methods",
+      "group": "SetMethods",
       "description": "Sets a configuration value to an empty array.",
       "funcName": "SetArray",
       "paramTypes": [
@@ -364,7 +364,7 @@
     },
     {
       "name": "SetBool",
-      "group": "Set Methods",
+      "group": "SetMethods",
       "description": "Sets a boolean configuration value.",
       "funcName": "SetBool",
       "paramTypes": [
@@ -393,7 +393,7 @@
     },
     {
       "name": "SetInt",
-      "group": "Set Methods",
+      "group": "SetMethods",
       "description": "Sets an integer configuration value.",
       "funcName": "SetInt",
       "paramTypes": [
@@ -422,7 +422,7 @@
     },
     {
       "name": "SetFloat",
-      "group": "Set Methods",
+      "group": "SetMethods",
       "description": "Sets a float configuration value.",
       "funcName": "SetFloat",
       "paramTypes": [
@@ -451,7 +451,7 @@
     },
     {
       "name": "SetString",
-      "group": "Set Methods",
+      "group": "SetMethods",
       "description": "Sets a string configuration value.",
       "funcName": "SetString",
       "paramTypes": [
@@ -480,7 +480,7 @@
     },
     {
       "name": "TrySetFromBool",
-      "group": "TrySet Methods",
+      "group": "TrySetMethods",
       "description": "Attempts to set a configuration value from a boolean, with type conversion if needed.",
       "funcName": "TrySetFromBool",
       "paramTypes": [
@@ -510,7 +510,7 @@
     },
     {
       "name": "TrySetFromInt",
-      "group": "TrySet Methods",
+      "group": "TrySetMethods",
       "description": "Attempts to set a configuration value from an integer, with type conversion if needed.",
       "funcName": "TrySetFromInt",
       "paramTypes": [
@@ -540,7 +540,7 @@
     },
     {
       "name": "TrySetFromFloat",
-      "group": "TrySet Methods",
+      "group": "TrySetMethods",
       "description": "Attempts to set a configuration value from a float, with type conversion if needed.",
       "funcName": "TrySetFromFloat",
       "paramTypes": [
@@ -570,7 +570,7 @@
     },
     {
       "name": "TrySetFromString",
-      "group": "TrySet Methods",
+      "group": "TrySetMethods",
       "description": "Attempts to set a configuration value from a string, with type conversion if needed.",
       "funcName": "TrySetFromString",
       "paramTypes": [
@@ -600,7 +600,7 @@
     },
     {
       "name": "PushNull",
-      "group": "Array Push Methods",
+      "group": "ArrayPushMethods",
       "description": "Pushes a null value to the current array node.",
       "funcName": "PushNull",
       "paramTypes": [
@@ -617,7 +617,7 @@
     },
     {
       "name": "PushBool",
-      "group": "Array Push Methods",
+      "group": "ArrayPushMethods",
       "description": "Pushes a boolean value to the current array node.",
       "funcName": "PushBool",
       "paramTypes": [
@@ -640,7 +640,7 @@
     },
     {
       "name": "PushInt",
-      "group": "Array Push Methods",
+      "group": "ArrayPushMethods",
       "description": "Pushes an integer value to the current array node.",
       "funcName": "PushInt",
       "paramTypes": [
@@ -663,7 +663,7 @@
     },
     {
       "name": "PushFloat",
-      "group": "Array Push Methods",
+      "group": "ArrayPushMethods",
       "description": "Pushes a float value to the current array node.",
       "funcName": "PushFloat",
       "paramTypes": [
@@ -686,7 +686,7 @@
     },
     {
       "name": "PushString",
-      "group": "Array Push Methods",
+      "group": "ArrayPushMethods",
       "description": "Pushes a string value to the current array node.",
       "funcName": "PushString",
       "paramTypes": [
@@ -709,7 +709,7 @@
     },
     {
       "name": "PushObject",
-      "group": "Array Push Methods",
+      "group": "ArrayPushMethods",
       "description": "Pushes an empty object to the current array node.",
       "funcName": "PushObject",
       "paramTypes": [
@@ -726,7 +726,7 @@
     },
     {
       "name": "PushArray",
-      "group": "Array Push Methods",
+      "group": "ArrayPushMethods",
       "description": "Pushes an empty array to the current array node.",
       "funcName": "PushArray",
       "paramTypes": [
@@ -743,7 +743,7 @@
     },
     {
       "name": "GetBool",
-      "group": "Get Methods",
+      "group": "GetMethods",
       "description": "Retrieves a boolean value from the configuration.",
       "funcName": "GetBool",
       "paramTypes": [
@@ -773,7 +773,7 @@
     },
     {
       "name": "GetInt",
-      "group": "Get Methods",
+      "group": "GetMethods",
       "description": "Retrieves an integer value from the configuration.",
       "funcName": "GetInt",
       "paramTypes": [
@@ -803,7 +803,7 @@
     },
     {
       "name": "GetFloat",
-      "group": "Get Methods",
+      "group": "GetMethods",
       "description": "Retrieves a float value from the configuration.",
       "funcName": "GetFloat",
       "paramTypes": [
@@ -833,7 +833,7 @@
     },
     {
       "name": "GetString",
-      "group": "Get Methods",
+      "group": "GetMethods",
       "description": "Retrieves a string value from the configuration.",
       "funcName": "GetString",
       "paramTypes": [
@@ -863,7 +863,7 @@
     },
     {
       "name": "GetAsBool",
-      "group": "GetAs Methods",
+      "group": "GetAsMethods",
       "description": "Retrieves a value from the configuration and converts it to boolean.",
       "funcName": "GetAsBool",
       "paramTypes": [
@@ -893,7 +893,7 @@
     },
     {
       "name": "GetAsInt",
-      "group": "GetAs Methods",
+      "group": "GetAsMethods",
       "description": "Retrieves a value from the configuration and converts it to integer.",
       "funcName": "GetAsInt",
       "paramTypes": [
@@ -923,7 +923,7 @@
     },
     {
       "name": "GetAsFloat",
-      "group": "GetAs Methods",
+      "group": "GetAsMethods",
       "description": "Retrieves a value from the configuration and converts it to float.",
       "funcName": "GetAsFloat",
       "paramTypes": [
@@ -953,7 +953,7 @@
     },
     {
       "name": "GetAsString",
-      "group": "GetAs Methods",
+      "group": "GetAsMethods",
       "description": "Retrieves a value from the configuration and converts it to string.",
       "funcName": "GetAsString",
       "paramTypes": [
@@ -983,7 +983,7 @@
     },
     {
       "name": "HasKey",
-      "group": "Query Methods",
+      "group": "QueryMethods",
       "description": "Checks if a key exists in the current configuration node.",
       "funcName": "HasKey",
       "paramTypes": [
@@ -1007,7 +1007,7 @@
     },
     {
       "name": "Empty",
-      "group": "Query Methods",
+      "group": "QueryMethods",
       "description": "Checks if the current configuration node is empty.",
       "funcName": "Empty",
       "paramTypes": [
@@ -1025,7 +1025,7 @@
     },
     {
       "name": "GetSize",
-      "group": "Query Methods",
+      "group": "QueryMethods",
       "description": "Returns the size of the current configuration node (number of elements in array or object).",
       "funcName": "GetSize",
       "paramTypes": [
@@ -1043,7 +1043,7 @@
     },
     {
       "name": "GetName",
-      "group": "Query Methods",
+      "group": "QueryMethods",
       "description": "Returns the name of the current configuration node.",
       "funcName": "GetName",
       "paramTypes": [
@@ -1061,7 +1061,7 @@
     },
     {
       "name": "GetPath",
-      "group": "Query Methods",
+      "group": "QueryMethods",
       "description": "Returns the full path to the current configuration node.",
       "funcName": "GetPath",
       "paramTypes": [
@@ -1079,7 +1079,7 @@
     },
     {
       "name": "JumpFirst",
-      "group": "Navigation Methods",
+      "group": "NavigationMethods",
       "description": "Jumps to the first child node in the current configuration node.",
       "funcName": "JumpFirst",
       "paramTypes": [
@@ -1097,7 +1097,7 @@
     },
     {
       "name": "JumpLast",
-      "group": "Navigation Methods",
+      "group": "NavigationMethods",
       "description": "Jumps to the last child node in the current configuration node.",
       "funcName": "JumpLast",
       "paramTypes": [
@@ -1115,7 +1115,7 @@
     },
     {
       "name": "JumpNext",
-      "group": "Navigation Methods",
+      "group": "NavigationMethods",
       "description": "Jumps to the next sibling node in the current configuration level.",
       "funcName": "JumpNext",
       "paramTypes": [
@@ -1133,7 +1133,7 @@
     },
     {
       "name": "JumpPrev",
-      "group": "Navigation Methods",
+      "group": "NavigationMethods",
       "description": "Jumps to the previous sibling node in the current configuration level.",
       "funcName": "JumpPrev",
       "paramTypes": [
@@ -1151,7 +1151,7 @@
     },
     {
       "name": "JumpKey",
-      "group": "Navigation Methods",
+      "group": "NavigationMethods",
       "description": "Jumps to a child node with the specified key, optionally creating it if it doesn't exist.",
       "funcName": "JumpKey",
       "paramTypes": [
@@ -1181,7 +1181,7 @@
     },
     {
       "name": "JumpN",
-      "group": "Navigation Methods",
+      "group": "NavigationMethods",
       "description": "Jumps to the nth child node in the current configuration node.",
       "funcName": "JumpN",
       "paramTypes": [
@@ -1205,7 +1205,7 @@
     },
     {
       "name": "JumpBack",
-      "group": "Navigation Methods",
+      "group": "NavigationMethods",
       "description": "Jumps back to the parent node in the configuration hierarchy.",
       "funcName": "JumpBack",
       "paramTypes": [
@@ -1223,7 +1223,7 @@
     },
     {
       "name": "JumpRoot",
-      "group": "Navigation Methods",
+      "group": "NavigationMethods",
       "description": "Jumps back to the root node of the configuration.",
       "funcName": "JumpRoot",
       "paramTypes": [
@@ -1240,7 +1240,7 @@
     },
     {
       "name": "Remove",
-      "group": "Removal Methods",
+      "group": "RemovalMethods",
       "description": "Removes the current configuration node.",
       "funcName": "Remove",
       "paramTypes": [
@@ -1258,7 +1258,7 @@
     },
     {
       "name": "RemoveKey",
-      "group": "Removal Methods",
+      "group": "RemovalMethods",
       "description": "Removes a child node with the specified key from the current configuration node.",
       "funcName": "RemoveKey",
       "paramTypes": [
@@ -1282,7 +1282,7 @@
     },
     {
       "name": "Clear",
-      "group": "Removal Methods",
+      "group": "RemovalMethods",
       "description": "Clears all child nodes from the current configuration node.",
       "funcName": "Clear",
       "paramTypes": [
@@ -1299,7 +1299,7 @@
     },
     {
       "name": "NodeToJsonString",
-      "group": "JSON Export",
+      "group": "JSONExport",
       "description": "Converts the current configuration node to a JSON string.",
       "funcName": "NodeToJsonString",
       "paramTypes": [
@@ -1317,7 +1317,7 @@
     },
     {
       "name": "RootToJsonString",
-      "group": "JSON Export",
+      "group": "JSONExport",
       "description": "Converts the entire configuration tree to a JSON string.",
       "funcName": "RootToJsonString",
       "paramTypes": [
