@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.8](https://github.com/untrustedmodders/plugify-plugin-configs/compare/v2.0.7...v2.0.8) (2026-01-03)
+
+
+### Bug Fixes
+
+* add build type to configure step ([b2ac368](https://github.com/untrustedmodders/plugify-plugin-configs/commit/b2ac3680f9acb4ed6019934344a1322fec4c4fb6))
+* rename groups name ([14f778b](https://github.com/untrustedmodders/plugify-plugin-configs/commit/14f778b40abe540fc0672083f6853ef2b151bf8a))
+
 ## [2.0.7](https://github.com/untrustedmodders/plugify-plugin-configs/compare/v2.0.6...v2.0.7) (2025-12-13)
 
 
