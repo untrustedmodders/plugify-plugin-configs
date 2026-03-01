@@ -1,36 +1,45 @@
-#include <memory>
-#include <string_view>
+#include "json_glaze.hpp"
 
 #include <glaze/glaze.hpp>
+#if PLUGIFY_HAS_CXX23
+#include <glaze/yaml.hpp>
+#include <glaze/toml.hpp>
+#endif
 
 #include <plugify-configs/methods.hpp>
 #include <plugify-configs/plugify-configs.hpp>
 
 namespace pcf {
-	static void MapJson(glz::json_t& json, Config& config) {
-		if (json.is_null()) {
+#if PLUGIFY_HAS_CXX23
+	using Value = glz::generic;
+#else
+	using Value = glz::json_t;
+#endif
+
+	static void Map(Value& value, Config& config) {
+		if (value.is_null()) {
 			config.Set(thisNode, nullptr);
-		} else if (json.is_boolean()) {
-			config.Set(thisNode, json.get_boolean());
-		} else if (json.is_number()) {
-			config.Set(thisNode, json.get_number());
-		} else if (json.is_string()) {
-			config.Set(thisNode, json.get_string());
-		} else if (json.is_object()) {
+		} else if (value.is_boolean()) {
+			config.Set(thisNode, value.get_boolean());
+		} else if (value.is_number()) {
+			config.Set(thisNode, value.get_number());
+		} else if (value.is_string()) {
+			config.Set(thisNode, value.get_string());
+		} else if (value.is_object()) {
 			config.Set(thisNode, cfobject);
-			auto& obj = json.get_object();
+			auto& obj = value.get_object();
 			for (auto& field: obj) {
 				config.JumpKey(std::get<0>(field), true);
-				MapJson(std::get<1>(field), config);
+				Map(std::get<1>(field), config);
 				config.JumpBack();
 			}
-		} else if (json.is_array()) {
+		} else if (value.is_array()) {
 			config.Set(thisNode, cfarray);
-			auto& arr = json.get_array();
+			auto& arr = value.get_array();
 			for (auto& item: arr) {
 				config.PushNull();
 				config.JumpLast();
-				MapJson(item, config);
+				Map(item, config);
 				config.JumpBack();
 			}
 		} else {
@@ -39,26 +48,51 @@ namespace pcf {
 	}
 
 	std::unique_ptr<Config> ReadJsonConfig(std::string_view path) {
-		glz::json_t json{};
-		auto ec = glz::read_file_json(json, path, std::string{});
+		Value value{};
+		auto ec = glz::read_file_json(value, path, std::string{});
 		if (ec) {
 			SetError(glz::format_error(ec));
 			return nullptr;
 		}
 		auto config = MakeConfig();
-		MapJson(json, *config);
+		Map(value, *config);
 		return config;
 	}
 
 	std::unique_ptr<Config> ReadJsoncConfig(std::string_view path) {
-		glz::json_t json{};
-		auto ec = glz::read_file_jsonc(json, path, std::string{});
+		Value value{};
+		auto ec = glz::read_file_jsonc(value, path, std::string{});
 		if (ec) {
 			SetError(glz::format_error(ec));
 			return nullptr;
 		}
 		auto config = MakeConfig();
-		MapJson(json, *config);
+		Map(value, *config);
 		return config;
 	}
+
+#if PLUGIFY_HAS_CXX23
+	std::unique_ptr<Config> ReadYamlConfig(std::string_view path) {
+		Value value{};
+		auto ec = glz::read_file_yaml(value, path);
+		if (ec) {
+			SetError(glz::format_error(ec));
+			return nullptr;
+		}
+		auto config = MakeConfig();
+		Map(value, *config);
+		return config;
+	}
+	std::unique_ptr<Config> ReadTomlConfig(std::string_view path) {
+		Value value{};
+		auto ec = glz::read_file_toml(value, path, std::string{});
+		if (ec) {
+			SetError(glz::format_error(ec));
+			return nullptr;
+		}
+		auto config = MakeConfig();
+		Map(value, *config);
+		return config;
+	}
+#endif
 }// namespace pcf

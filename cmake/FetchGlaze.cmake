@@ -3,7 +3,7 @@ include(FetchContent)
 message(STATUS "Pulling and configuring glaze")
 
 if (CMAKE_CXX_STANDARD GREATER 20)
-    set(GLAZE_TAG "v5.5.4" CACHE STRING "")
+    set(GLAZE_TAG "v7.1.0" CACHE STRING "")
 else()
     set(GLAZE_TAG "v2.9.5" CACHE STRING "")
 endif()
