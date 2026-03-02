@@ -1,7 +1,8 @@
 #include "json_glaze.hpp"
 
 #include <glaze/glaze.hpp>
-#if PLUGIFY_HAS_CXX23
+
+#if __has_include(<glaze/yaml.hpp>)
 #include <glaze/yaml.hpp>
 #include <glaze/toml.hpp>
 #endif
@@ -10,7 +11,7 @@
 #include <plugify-configs/plugify-configs.hpp>
 
 namespace pcf {
-#if PLUGIFY_HAS_CXX23
+#if __has_include(<glaze/yaml.hpp>)
 	using Value = glz::generic;
 #else
 	using Value = glz::json_t;
@@ -49,8 +50,7 @@ namespace pcf {
 
 	std::unique_ptr<Config> ReadJsonConfig(std::string_view path) {
 		Value value{};
-		auto ec = glz::read_file_json(value, path, std::string{});
-		if (ec) {
+		if (auto ec = glz::read_file_json(value, path, std::string{})) {
 			SetError(glz::format_error(ec));
 			return nullptr;
 		}
@@ -61,8 +61,7 @@ namespace pcf {
 
 	std::unique_ptr<Config> ReadJsoncConfig(std::string_view path) {
 		Value value{};
-		auto ec = glz::read_file_jsonc(value, path, std::string{});
-		if (ec) {
+		if (auto ec = glz::read_file_jsonc(value, path, std::string{})) {
 			SetError(glz::format_error(ec));
 			return nullptr;
 		}
@@ -71,11 +70,10 @@ namespace pcf {
 		return config;
 	}
 
-#if PLUGIFY_HAS_CXX23
+#if __has_include(<glaze/yaml.hpp>)
 	std::unique_ptr<Config> ReadYamlConfig(std::string_view path) {
 		Value value{};
-		auto ec = glz::read_file_yaml(value, path);
-		if (ec) {
+		if (auto ec = glz::read_file_yaml(value, path)) {
 			SetError(glz::format_error(ec));
 			return nullptr;
 		}
@@ -83,10 +81,10 @@ namespace pcf {
 		Map(value, *config);
 		return config;
 	}
+
 	std::unique_ptr<Config> ReadTomlConfig(std::string_view path) {
 		Value value{};
-		auto ec = glz::read_file_toml(value, path, std::string{});
-		if (ec) {
+		if (auto ec = glz::read_file_toml(value, path, std::string{})) {
 			SetError(glz::format_error(ec));
 			return nullptr;
 		}
