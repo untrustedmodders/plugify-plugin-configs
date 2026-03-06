@@ -10,7 +10,7 @@ namespace pcf {
 		_factory = std::make_unique<ReaderFactory>();
 		_factory->RegisterReader("json", &ReadJsonConfig);
 		_factory->RegisterReader("jsonc", &ReadJsoncConfig);
-#if PLUGIFY_HAS_CXX23
+#if __has_include(<glaze/yaml.hpp>)
 		_factory->RegisterReader("yaml", &ReadYamlConfig);
 		_factory->RegisterReader("yml", &ReadYamlConfig);
 		_factory->RegisterReader("toml", &ReadTomlConfig);
