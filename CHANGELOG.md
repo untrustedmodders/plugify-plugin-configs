@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.1.0](https://github.com/untrustedmodders/plugify-plugin-configs/compare/v2.0.8...v2.1.0) (2026-03-10)
+
+
+### Features
+
+* add yaml/toml support ([c0a53fa](https://github.com/untrustedmodders/plugify-plugin-configs/commit/c0a53fa586b1b1e93b11fee8d39239a73a832f05))
+
+
+### Bug Fixes
+
+* linux build ([554dfbd](https://github.com/untrustedmodders/plugify-plugin-configs/commit/554dfbd054ffa68b0443e69d024c491b4c848081))
+* rework c++23 check ([9c95fc0](https://github.com/untrustedmodders/plugify-plugin-configs/commit/9c95fc0a3a182d9c41cfe9c8d0c3ba2b2eca0916))
+* update plugify ([5394764](https://github.com/untrustedmodders/plugify-plugin-configs/commit/539476468fa592a352141acab52b3b136ec3c55f))
+
 ## [2.0.8](https://github.com/untrustedmodders/plugify-plugin-configs/compare/v2.0.7...v2.0.8) (2026-01-03)
 
 
