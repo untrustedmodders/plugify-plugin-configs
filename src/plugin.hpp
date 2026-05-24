@@ -7,11 +7,11 @@ namespace pcf {
 	class Config;
 	class ReaderFactory;
 
-	class ConfigsPlugin final : public plg::IPluginEntry {
+	class ConfigsPlugin final : public plg::Plugin {
 	public:
 		// IPluginEntry interface
-		void OnPluginStart() final;
-		void OnPluginEnd() final;
+		plg::PluginResult OnPluginStart() override;
+		plg::PluginResult OnPluginEnd() override;
 
 	public:
 		std::unique_ptr<Config> ReadConfig(std::string_view path);

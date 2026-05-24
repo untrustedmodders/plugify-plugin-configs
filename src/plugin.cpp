@@ -6,7 +6,7 @@
 #include <plugify_configs_export.h>
 
 namespace pcf {
-	void ConfigsPlugin::OnPluginStart() {
+	plg::PluginResult ConfigsPlugin::OnPluginStart() {
 		_factory = std::make_unique<ReaderFactory>();
 		_factory->RegisterReader("json", &ReadJsonConfig);
 		_factory->RegisterReader("jsonc", &ReadJsoncConfig);
@@ -16,10 +16,12 @@ namespace pcf {
 		_factory->RegisterReader("toml", &ReadTomlConfig);
 		_factory->RegisterReader("tml", &ReadTomlConfig);
 #endif
+		return {};
 	}
 
-	void ConfigsPlugin::OnPluginEnd() {
+	plg::PluginResult ConfigsPlugin::OnPluginEnd() {
 		_factory.reset();
+		return {};
 	}
 
 	std::unique_ptr<Config> ConfigsPlugin::ReadConfig(std::string_view path) {
@@ -95,4 +97,4 @@ namespace pcf {
 	ConfigsPlugin plugin;
 }// namespace pcf
 
-EXPOSE_PLUGIN(PLUGIFY_CONFIGS_API, pcf::ConfigsPlugin, &pcf::plugin)
+PLUGIFY_PLUGIN(PLUGIFY_CONFIGS_API, &pcf::plugin)
