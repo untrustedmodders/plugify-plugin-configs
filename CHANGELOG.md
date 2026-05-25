@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.2](https://github.com/untrustedmodders/plugify-plugin-configs/compare/v2.1.1...v2.1.2) (2026-05-25)
+
+
+### Bug Fixes
+
+* add scopes check ([8408a36](https://github.com/untrustedmodders/plugify-plugin-configs/commit/8408a36afcadbbd2d61a9aaebfb1c9a3c5bf3f0a))
+
 ## [2.1.1](https://github.com/untrustedmodders/plugify-plugin-configs/compare/v2.1.0...v2.1.1) (2026-05-24)
 
 
