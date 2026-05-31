@@ -757,13 +757,15 @@
           "name": "key",
           "type": "string",
           "ref": false,
-          "description": "The key to retrieve."
+          "description": "The key to retrieve.",
+          "default": "##this##"
         },
         {
           "name": "defaultValue",
           "type": "bool",
           "ref": false,
-          "description": "The default value to return if the key is not found."
+          "description": "The default value to return if the key is not found.",
+          "default": false
         }
       ],
       "retType": {
@@ -787,13 +789,15 @@
           "name": "key",
           "type": "string",
           "ref": false,
-          "description": "The key to retrieve."
+          "description": "The key to retrieve.",
+          "default": "##this##"
         },
         {
           "name": "defaultValue",
           "type": "int64",
           "ref": false,
-          "description": "The default value to return if the key is not found."
+          "description": "The default value to return if the key is not found.",
+          "default": 0
         }
       ],
       "retType": {
@@ -817,13 +821,15 @@
           "name": "key",
           "type": "string",
           "ref": false,
-          "description": "The key to retrieve."
+          "description": "The key to retrieve.",
+          "default": "##this##"
         },
         {
           "name": "defaultValue",
           "type": "double",
           "ref": false,
-          "description": "The default value to return if the key is not found."
+          "description": "The default value to return if the key is not found.",
+          "default": 0.0
         }
       ],
       "retType": {
@@ -847,13 +853,15 @@
           "name": "key",
           "type": "string",
           "ref": false,
-          "description": "The key to retrieve."
+          "description": "The key to retrieve.",
+          "default": "##this##"
         },
         {
           "name": "defaultValue",
           "type": "string",
           "ref": false,
-          "description": "The default value to return if the key is not found."
+          "description": "The default value to return if the key is not found.",
+          "default": ""
         }
       ],
       "retType": {
@@ -877,13 +885,15 @@
           "name": "key",
           "type": "string",
           "ref": false,
-          "description": "The key to retrieve."
+          "description": "The key to retrieve.",
+          "default": "##this##"
         },
         {
           "name": "defaultValue",
           "type": "bool",
           "ref": false,
-          "description": "The default value to return if the key is not found."
+          "description": "The default value to return if the key is not found.",
+          "default": false
         }
       ],
       "retType": {
@@ -907,13 +917,15 @@
           "name": "key",
           "type": "string",
           "ref": false,
-          "description": "The key to retrieve."
+          "description": "The key to retrieve.",
+          "default": "##this##"
         },
         {
           "name": "defaultValue",
           "type": "int64",
           "ref": false,
-          "description": "The default value to return if the key is not found."
+          "description": "The default value to return if the key is not found.",
+          "default": 0
         }
       ],
       "retType": {
@@ -937,13 +949,15 @@
           "name": "key",
           "type": "string",
           "ref": false,
-          "description": "The key to retrieve."
+          "description": "The key to retrieve.",
+          "default": "##this##"
         },
         {
           "name": "defaultValue",
           "type": "double",
           "ref": false,
-          "description": "The default value to return if the key is not found."
+          "description": "The default value to return if the key is not found.",
+          "default": 0.0
         }
       ],
       "retType": {
@@ -967,13 +981,15 @@
           "name": "key",
           "type": "string",
           "ref": false,
-          "description": "The key to retrieve."
+          "description": "The key to retrieve.",
+          "default": "##this##"
         },
         {
           "name": "defaultValue",
           "type": "string",
           "ref": false,
-          "description": "The default value to return if the key is not found."
+          "description": "The default value to return if the key is not found.",
+          "default": ""
         }
       ],
       "retType": {
@@ -1171,7 +1187,8 @@
           "name": "create",
           "type": "bool",
           "ref": false,
-          "description": "If true, creates the node if it doesn't exist."
+          "description": "If true, creates the node if it doesn't exist.",
+          "default": false
         }
       ],
       "retType": {
