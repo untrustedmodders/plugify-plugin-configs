@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.1.2](https://github.com/untrustedmodders/plugify-plugin-configs/compare/v2.1.1...v2.1.2) (2026-10-24)
+
+
+### Bug Fixes
+
+* add defaults params ([79dd5a0](https://github.com/untrustedmodders/plugify-plugin-configs/commit/79dd5a0e6fbc358018b7ebef86a9e58b735b25ec))
+* add scopes check ([8408a36](https://github.com/untrustedmodders/plugify-plugin-configs/commit/8408a36afcadbbd2d61a9aaebfb1c9a3c5bf3f0a))
+* bump glaze to v7.1.1 to allow plugin reload ([f130605](https://github.com/untrustedmodders/plugify-plugin-configs/commit/f13060522cc840838b834f8caf0736d303a12767))
+
 ## [2.1.1](https://github.com/untrustedmodders/plugify-plugin-configs/compare/v2.1.0...v2.1.1) (2026-05-24)
 
 
